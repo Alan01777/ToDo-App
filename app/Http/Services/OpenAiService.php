@@ -14,8 +14,6 @@ class OpenAiService
                 ['role' => 'user', 'content' => $prompt . ':'. $request],
             ],
         ]);
-
         return $response->choices[0]->message->content ?? '';
     }
-
 }
