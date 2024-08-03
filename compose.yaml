@@ -1,19 +1,27 @@
 services:
   webserver:
-      image: nginx:alpine
-      container_name: webserver
-      restart: unless-stopped
-      tty: true
-      ports:
-        - "8080:80"
-        - "8443:443"
-      volumes:
-        - ./:/var/www
-        - ./nginx/conf.d/:/etc/nginx/conf.d/
-        - ./certbot/www:/var/www/certbot/:ro
-      networks:
-        - app-network
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./certbot/www:/var/www/certbot/
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    networks:
+      - app-network
 
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/
+      - ./certbot/conf/:/etc/letsencrypt/
+    networks:
+      - app-network
 
   app:
     build:
@@ -22,47 +30,10 @@ services:
     container_name: app
     restart: always
     env_file:
-      - .env
-    volumes:
-      - .:/var/www
+      - .env  # Uncomment this if your app needs access to the host filesystem
     networks:
       - app-network
-
-  # redis:
-  #   image: redis:7.4-rc2-alpine3.20
-  #   container_name: redis
-  #   restart: always
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - redis:/data
-  #   networks:
-  #     - app-network
-
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
-
-  # db:
-  #   image: postgres:12.19-alpine
-  #   container_name: database
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: ${DB_USERNAME}
-  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
-  #     POSTGRES_DB: ${DB_DATABASE}
-  #   volumes:
-  #     - dbdata:/var/lib/postgresql/data
-  #   networks:
-  #     - app-network
 
 networks:
   app-network:
     driver: bridge
-volumes:
-  redis:
-    driver: local
-#   dbdata:
-#     driver: local
