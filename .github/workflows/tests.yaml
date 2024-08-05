@@ -1,0 +1,76 @@
+# This YAML file defines a GitHub Actions workflow for continuous integration (CI) to run tests on a Laravel application.
+# It specifies that the workflow should trigger on pull requests that are opened, synchronized, or reopened.
+# The workflow consists of a single job named "test" that runs on the latest version of Ubuntu.
+
+name: CI - Run Tests
+
+on:
+  push:
+    branches:
+      - main
+      
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    # Defines a service named "db" that runs a PostgreSQL database container.
+    # The container is based on the "postgres:12.19-alpine" image and exposes port 5432.
+    # It sets environment variables for the database connection and health checks.
+    services:
+      db:
+        image: postgres:12.19-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: secret-test
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP Action
+        uses: shivammathur/setup-php@2.31.1
+        with:
+          php-version: '8.3'
+          extensions: pdo, pdo_pgsql, zip
+          tools: composer:v2, php-cs-fixer, phpunit
+          coverage: xdebug
+
+      - name: Install dependencies with composer
+        run: composer update --no-ansi --no-interaction --no-progress
+
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+  
+      - name: Run Tests
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: test
+          DB_USERNAME: test
+          DB_PASSWORD: secret-test
+        run: |
+          php artisan migrate --seed
+          vendor/bin/phpunit --coverage-clover=coverage.xml
+
+    
+      - name: SonarCloud
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
