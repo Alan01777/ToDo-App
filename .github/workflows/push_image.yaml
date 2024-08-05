@@ -39,12 +39,12 @@ jobs:
           pipx install docker-squash
 
       - name: Squash Image
-        run: docker-squash -t alan01777/sistema-consultas-medicas:${{ env.short_sha }} initial:${{ env.short_sha }}
+        run: docker-squash -t alan01777/todo-app:${{ env.short_sha }} initial:${{ env.short_sha }}
 
       - name: Tag Latest
-        run: docker tag alan01777/sistema-consultas-medicas:${{ env.short_sha }} alan01777/sistema-consultas-medicas:latest
+        run: docker tag alan01777/todo-app:${{ env.short_sha }} alan01777/todo-app:latest
 
       - name: Push Images
         run: |
-          docker push alan01777/sistema-consultas-medicas:${{ env.short_sha }}
-          docker push alan01777/sistema-consultas-medicas:latest
+          docker push alan01777/todo-app:${{ env.short_sha }}
+          docker push alan01777/todo-app:latest
