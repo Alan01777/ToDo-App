@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Repositories;
 
 
@@ -30,10 +31,10 @@ class CategoryRepository implements RepositoryInterface
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator The paginated list of users.
      * @throws NullValueException
      */
-    public function findall()
+    public function findAllbyId($userId)
     {
-        $categories = $this->category->with('tasks')->paginate(25);
-        if(!$categories){
+        $categories = $this->category->with('tasks')->where('user_id', $userId)->paginate(25);
+        if (!$categories) {
             throw new NullValueException('No Categories found!');
         }
         return CategoryResource::collection($categories);
@@ -57,10 +58,10 @@ class CategoryRepository implements RepositoryInterface
      * @return CategoryResource
      * @throws NullValueException
      */
-    public function find($id)
+    public function find($id, $userId)
     {
-        $category = $this->category->find($id);
-        if(!$category){
+        $category = $this->category->where('user_id', $userId)->where('id', $id)->first();
+        if (!$category) {
             throw new NullValueException('No Category found with id' . $id);
         }
         return $category;
@@ -74,10 +75,10 @@ class CategoryRepository implements RepositoryInterface
      * @return CategoryResource
      * @throws NullValueException
      */
-    public function update($id, $data)
+    public function update($id, $data, $userId)
     {
-        $category = $this->find($id);
-        if(!$category){
+        $category = $this->find($id, $userId); // Call the find method using $this
+        if (!$category) {
             throw new NullValueException('No Category found with id: ' . $id);
         }
         $category->update($data);
@@ -90,10 +91,10 @@ class CategoryRepository implements RepositoryInterface
      * @param int $id
      * @throws NullValueException
      */
-    public function delete($id)
+    public function delete($id, $userId)
     {
-        $category = $this->find($id);
-        if(!$category){
+        $category = $this->find($id, $userId);
+        if (!$category) {
             throw new NullValueException('No Category found with id' . $id);
         }
         $category->delete($id);

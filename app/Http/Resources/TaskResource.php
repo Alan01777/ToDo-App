@@ -21,9 +21,9 @@ class TaskResource extends JsonResource
             'status' => $this->status,
             'due_date' => $this->due_date,
             'priority' => $this->priority,
-            'user' => $this->user->name,
-            'tags' => $this->tags->pluck('title'),
-            'categories' => $this->categories->pluck('title')
+            'tags' => TagResource::collection($this->tags),
+            'categories' => CategoryResource::collection($this->categories),
+            'user' => new UserResource($this->user),
         ];
     }
 }

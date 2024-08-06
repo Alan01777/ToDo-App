@@ -30,10 +30,10 @@ class TagRepository implements RepositoryInterface
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator The paginated list of users.
      * @throws NullValueException
      */
-    public function findall()
+    public function findAllbyId($userId)
     {
-        $tags = $this->tag->with('tasks')->paginate(25);
-        if(!$tags){
+        $tags = $this->tag->with('tasks')->where('user_id', $userId)->paginate(25);
+        if (!$tags) {
             throw new NullValueException('No tags found!');
         }
         return TagResource::collection($tags);
@@ -57,10 +57,10 @@ class TagRepository implements RepositoryInterface
      * @return TagResource
      * @throws NullValueException
      */
-    public function find($id)
+    public function find($id, $userId)
     {
-        $tag = $this->tag->find($id);
-        if(!$tag){
+        $tag = $this->tag->where('id', $id)->where('user_id', $userId)->first();
+        if (!$tag) {
             throw new NullValueException('No tag found with id' . $id);
         }
         return $tag;
@@ -74,10 +74,10 @@ class TagRepository implements RepositoryInterface
      * @return TagResource
      * @throws NullValueException
      */
-    public function update($id, $data)
+    public function update($id, $data, $userId)
     {
-        $tag = $this->find($id);
-        if(!$tag){
+        $tag = $this->find($id, $userId);
+        if (!$tag) {
             throw new NullValueException('No tag found with id: ' . $id);
         }
         $tag->update($data);
@@ -90,10 +90,10 @@ class TagRepository implements RepositoryInterface
      * @param int $id
      * @throws NullValueException
      */
-    public function delete($id)
+    public function delete($id, $userId)
     {
-        $tag = $this->find($id);
-        if(!$tag){
+        $tag = $this->find($id, $userId);
+        if (!$tag) {
             throw new NullValueException('No tag found with id' . $id);
         }
         $tag->delete($id);

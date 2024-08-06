@@ -9,28 +9,28 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param UserService $userService
-     * @return \Illuminate\Http\Response
-     */
-    public function index(UserService $userService)
-    {
-        return $userService->index();
-    }
+    // /**
+    //  * Display a listing of the resource.
+    //  *
+    //  * @param UserService $userService
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function index(UserService $userService)
+    // {
+    //     return $userService->index();
+    // }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param UserService $userService
-     * @param UserRequest $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(UserService $userService, UserRequest $request)
-    {
-        return $userService->store($request);
-    }
+    // /**
+    //  * Store a newly created resource in storage.
+    //  *
+    //  * @param UserService $userService
+    //  * @param UserRequest $request
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function store(UserService $userService, UserRequest $request)
+    // {
+    //     return $userService->store($request);
+    // }
 
     /**
      * Display the specified resource.

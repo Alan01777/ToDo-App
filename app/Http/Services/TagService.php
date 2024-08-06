@@ -5,9 +5,11 @@ namespace App\Http\Services;
 use App\Http\Requests\TagRequest;
 use App\Http\Resources\TagResource;
 use App\Http\Repositories\TagRepository;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
- * Class TaskService
+ * Class TagService
  * @package App\Http\Services
  */
 class TagService
@@ -18,7 +20,8 @@ class TagService
     protected $tagRepository;
 
     /**
-     * TaskService constructor.
+     * TagService constructor.
+     *
      * @param TagRepository $tagRepository
      */
     public function __construct(TagRepository $tagRepository)
@@ -29,12 +32,14 @@ class TagService
     /**
      * Get all Tags.
      *
-     * @return TagResource
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        $Tags = $this->tagRepository->findall();
-        return TagResource::collection($Tags);
+        $user = auth()->user();
+        $tags = $this->tagRepository->findAllbyId($user->id);
+
+        return TagResource::collection($tags);
     }
 
     /**
@@ -43,10 +48,13 @@ class TagService
      * @param TagRequest $request
      * @return TagResource
      */
-    public function store(TagRequest $request)
+    public function store(TagRequest $request): TagResource
     {
-        $data = $request->validated();
+        $validatedData = $request->validated();
+        $data = array_merge($validatedData, ['user_id' => auth()->user()->id]);
+
         $tag = $this->tagRepository->create($data);
+
         return new TagResource($tag);
     }
 
@@ -56,9 +64,11 @@ class TagService
      * @param int $id
      * @return TagResource
      */
-    public function show(int $id)
+    public function show(int $id): TagResource
     {
-        $tag = $this->tagRepository->find($id);
+        $user = auth()->user();
+        $tag = $this->tagRepository->find($id, $user->id);
+
         return new TagResource($tag);
     }
 
@@ -69,10 +79,14 @@ class TagService
      * @param int $id
      * @return TagResource
      */
-    public function update(TagRequest $request, int $id)
+    public function update(TagRequest $request, int $id): TagResource
     {
-        $data = $request->validated();
-        $tag = $this->tagRepository->update($id, $data);
+        $user = auth()->user();
+        $validatedData = $request->validated();
+        $data = array_merge($validatedData, ['user_id' => $user->id]);
+
+        $tag = $this->tagRepository->update($id, $data, $user->id);
+
         return new TagResource($tag);
     }
 
@@ -80,11 +94,13 @@ class TagService
      * Delete a Tag.
      *
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
-        $this->tagRepository->delete($id);
+        $user = auth()->user();
+        $this->tagRepository->delete($id, $user->id);
+
         return response()->json(null, 204);
     }
 }

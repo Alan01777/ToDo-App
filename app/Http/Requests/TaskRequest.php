@@ -29,7 +29,6 @@ class TaskRequest extends FormRequest
                 'status' => 'sometimes|string|in:pending,completed',
                 'due_date' => 'nullable|date',
                 'priority' => 'required|integer|min:1|max:5',
-                'user_id' => 'required|exists:users,id',
                 'tag_id' => 'nullable',
                 'category_id' => 'nullable',
             ];
@@ -41,7 +40,6 @@ class TaskRequest extends FormRequest
                 'status' => 'required|string|in:pending,completed',
                 'due_date' => 'nullable|date',
                 'priority' => 'required|integer|min:1|max:5',
-                'user_id' => 'required|exists:users,id',
                 'tag_id' => 'nullable',
                 'category_id' => 'nullable',
             ];

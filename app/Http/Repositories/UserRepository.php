@@ -26,7 +26,7 @@ class UserRepository implements RepositoryInterface
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator The paginated list of users.
      * @throws NullValueException If no users are found.
      */
-    public function findall()
+    public function findAllbyId($id)
     {
         $users = $this->user->with('tasks')->paginate(25);
         if ($users->total() === 0) {

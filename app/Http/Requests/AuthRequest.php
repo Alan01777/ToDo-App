@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TagRequest extends FormRequest
+class AuthRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,15 +21,22 @@ class TagRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->routeIs('tags.update')) {
-            // Rules for 'users.update' route
+        if ($this->routeIs('register')) {
             return [
-                'title' => 'sometimes|string|max:255',
-            ];
-        } else {
-            return [
-                'title' => 'required|string|max:255',
+                'name' => 'required|string',
+                'email' => 'required|string|unique:users',
+                'password' => 'required|string',
+                'c_password' => 'required|same:password',
             ];
         }
+
+        if ($this->routeIs('login')) {
+            return [
+                'email' => 'required|string',
+                'password' => 'required|string',
+            ];
+        }
+
+        return [];
     }
 }
