@@ -22,11 +22,14 @@ class TaskSeeder extends Seeder
             $tagIds = $user->tags->pluck('id')->toArray(); 
             $categoriesId = $user->categories->pluck('id')->toArray();
 
-            Task::factory()->count(random_int(1,3))->create([
+            $tasks = Task::factory()->count(random_int(1,3))->create([
                 'user_id' => $user->id,
-                'tag_id' => Arr::random($tagIds),
-                'category_id' => Arr::random($categoriesId)
             ]);
+
+            foreach ($tasks as $task) {
+                $task->tags()->attach(Arr::random($tagIds, random_int(1, count($tagIds))));
+                $task->categories()->attach(Arr::random($categoriesId, random_int(1, count($categoriesId))));
+            }
         }
     }
 }
