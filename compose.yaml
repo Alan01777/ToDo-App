@@ -25,9 +25,7 @@ services:
       - app-network
 
   backend:
-    build:
-      dockerfile: dockerfile
-      context: .
+    image: alan01777/todo-app:latest
     container_name: backend
     restart: always
     env_file:
