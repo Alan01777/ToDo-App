@@ -40,7 +40,7 @@ services:
       context: ./frontend
     container_name: frontend
     volumes:
-        - ./frontend:/var/www/frontend/
+        - ./frontend:/var/www
   
 
 networks:
