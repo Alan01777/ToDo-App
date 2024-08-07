@@ -31,7 +31,7 @@ services:
     container_name: backend
     restart: always
     env_file:
-      - .env  # Uncomment this if your app needs access to the host filesystem
+      - ./backend/.env  # Uncomment this if your app needs access to the host filesystem
     networks:
       - app-network
   
