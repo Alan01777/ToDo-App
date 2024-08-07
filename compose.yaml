@@ -33,14 +33,13 @@ services:
     networks:
       - app-network
   
-  # frontend:
-  #   build:
-  #     dockerfile: dockerfile
-  #     context: ./frontend
-  #   container_name: frontend
-  #   volumes:
-  #       - ./frontend:/var/www/frontend/
-  #       - ./.env:/var/www/front/.env
+  frontend:
+    build:
+      dockerfile: dockerfile
+      context: ./frontend
+    container_name: frontend
+    volumes:
+        - ./frontend:/var/www/frontend/
   
 
 networks:
