@@ -12,7 +12,7 @@ services:
       - ./backend:/var/www/backend
       - ./backend/nginx/conf.d/:/etc/nginx/conf.d/
       - ./backend/certbot/www:/var/www/certbot/
-      - ./backend/certbot/conf/:/etc/nginx/ssl/:ro
+      - ./backend/certbot/conf/:/etc/nginx/ssl/
     networks:
       - app-network
 
