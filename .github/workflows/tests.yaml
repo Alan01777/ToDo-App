@@ -48,6 +48,7 @@ jobs:
 
       - name: Prepare Laravel Application
         run: |
+          cd backend
           cp .env.example .env
           php artisan key:generate
   
@@ -60,6 +61,7 @@ jobs:
           DB_USERNAME: test
           DB_PASSWORD: secret-test
         run: |
+          cd backend
           php artisan migrate --seed
           vendor/bin/phpunit --coverage-clover=coverage.xml
 

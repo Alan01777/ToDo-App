@@ -30,6 +30,7 @@ jobs:
       - name: Build Image
         uses: docker/build-push-action@v6
         with:
+          context: ./backend
           push: false
           tags: initial:${{ env.short_sha }}
 
