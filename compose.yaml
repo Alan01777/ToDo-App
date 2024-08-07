@@ -7,11 +7,13 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "9000:9000"
     volumes:
-      - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-      - ./certbot/www:/var/www/certbot/
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - ./frontend:/var/www/frontend
+      - ./backend:/var/www/backend
+      - ./backend/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./backend/certbot/www:/var/www/certbot/
+      - ./backend/certbot/conf/:/etc/nginx/ssl/
     networks:
       - app-network
 
@@ -23,16 +25,23 @@ services:
     networks:
       - app-network
 
-  app:
-    build:
-      dockerfile: dockerfile
-      context: .
-    container_name: app
+  backend:
+    image: alan01777/todo-app:latest
+    container_name: backend
     restart: always
     env_file:
-      - .env  # Uncomment this if your app needs access to the host filesystem
+      - ./backend/.env  # Uncomment this if your app needs access to the host filesystem
     networks:
       - app-network
+  
+  frontend:
+    build:
+      dockerfile: dockerfile
+      context: ./frontend
+    container_name: frontend
+    volumes:
+        - ./frontend:/var/www
+  
 
 networks:
   app-network:

@@ -8,12 +8,12 @@ RUN composer install --no-dev --no-scripts
 
 FROM php:8.3-fpm-alpine AS runner
 
-WORKDIR /var/www
+WORKDIR /var/www/backend
 
 COPY --from=build /var/www/vendor /var/www/vendor
 
 # Copy application files
-COPY . /var/www
+COPY . /var/www/backend
 
 # Install dependencies and clean up in the same layer
 RUN apk add --no-cache \
