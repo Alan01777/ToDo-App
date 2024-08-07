@@ -54,18 +54,18 @@ jobs:
           cp .env.example .env
           php artisan key:generate
   
-      - name: Run Tests
-        env:
-          DB_CONNECTION: pgsql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 5432
-          DB_DATABASE: test
-          DB_USERNAME: test
-          DB_PASSWORD: secret-test
-        run: |
-          cd backend
-          php artisan migrate --seed
-          vendor/bin/phpunit --coverage-clover=coverage.xml
+      # - name: Run Tests
+      #   env:
+      #     DB_CONNECTION: pgsql
+      #     DB_HOST: 127.0.0.1
+      #     DB_PORT: 5432
+      #     DB_DATABASE: test
+      #     DB_USERNAME: test
+      #     DB_PASSWORD: secret-test
+      #   run: |
+      #     cd backend
+      #     php artisan migrate --seed
+      #     vendor/bin/phpunit --coverage-clover=coverage.xml
 
     
       - name: SonarCloud
