@@ -8,10 +8,11 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-      - ./certbot/www:/var/www/certbot/
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - ./frontend:/var/www/frontend
+      - ./backend:/var/www/backend
+      - ./backend/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./backend/certbot/www:/var/www/certbot/
+      - ./backend/certbot/conf/:/etc/nginx/ssl/:ro
     networks:
       - app-network
 
@@ -23,16 +24,26 @@ services:
     networks:
       - app-network
 
-  app:
+  backend:
     build:
       dockerfile: dockerfile
       context: .
-    container_name: app
+    container_name: backend
     restart: always
     env_file:
       - .env  # Uncomment this if your app needs access to the host filesystem
     networks:
       - app-network
+  
+  frontend:
+    build:
+      dockerfile: dockerfile
+      context: ./frontend
+    container_name: frontend
+    volumes:
+        - ./frontend:/var/www/frontend/
+        - ./.env:/var/www/front/.env
+  
 
 networks:
   app-network:
