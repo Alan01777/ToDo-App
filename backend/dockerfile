@@ -1,8 +1,8 @@
 FROM composer:lts AS build
 
-WORKDIR /var/www
+WORKDIR /var/www/backend
 
-COPY composer.lock composer.json /var/www/
+COPY composer.lock composer.json /var/www/backend/
 
 RUN composer install --no-dev --no-scripts
 
