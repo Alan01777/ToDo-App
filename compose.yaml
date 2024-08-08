@@ -26,7 +26,7 @@ services:
       - app-network
 
   backend:
-    image: alan01777/todo-app:latest
+    image: alan01777/todo-app-backend:latest
     container_name: backend
     restart: always
     env_file:
@@ -35,9 +35,7 @@ services:
       - app-network
 
   frontend:
-    build:
-      dockerfile: dockerfile
-      context: ./frontend
+    image: alan01777/todo-app-frontend:latest
     container_name: frontend
     volumes:
       - frontend:/var/www

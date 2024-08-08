@@ -27,12 +27,19 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Image
+      - name: Build Backend Image
         uses: docker/build-push-action@v6
         with:
           context: ./backend
           push: false
-          tags: initial:${{ env.short_sha }}
+          tags: backend-initial:${{ env.short_sha }}
+
+      - name: Build Frontend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: false
+          tags: frontend-initial:${{ env.short_sha }}
 
       - name: Install squash
         run: |
@@ -40,12 +47,42 @@ jobs:
           pipx install docker-squash
 
       - name: Squash Image
-        run: docker-squash -t alan01777/todo-app:${{ env.short_sha }} initial:${{ env.short_sha }}
+        run: |
+          docker-squash -t alan01777/todo-app-backend:${{ env.short_sha }} backend-initial:${{ env.short_sha }}
+          docker-squash -t alan01777/todo-app-frontend:${{ env.short_sha }} frontend-initial:${{ env.short_sha }}
+
 
       - name: Tag Latest
-        run: docker tag alan01777/todo-app:${{ env.short_sha }} alan01777/todo-app:latest
+        run: |
+          docker tag alan01777/todo-app-backend:${{ env.short_sha }} alan01777/todo-app-backend:latest
+          docker tag alan01777/todo-app-frontend:${{ env.short_sha }} alan01777/todo-app-frontend:latest
 
       - name: Push Images
         run: |
-          docker push alan01777/todo-app:${{ env.short_sha }}
-          docker push alan01777/todo-app:latest
+          docker push alan01777/todo-app-backend:${{ env.short_sha }}
+          docker push alan01777/todo-app-frontend:${{ env.short_sha }}
+          docker push alan01777/todo-app-backend:latest
+          docker push alan01777/todo-app-frontend:latest
+
+  test-images:
+    name: Test Docker pull Images
+    runs-on: ubuntu:latest
+
+    steps:
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker Hub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          
+      - name: Pull Images
+        run: |
+          docker pull alan01777/todo-app-frontend:latest
+          docker pull alan01777/todo-app-backend:latest
+
+      - name: Create Containers
+        run: sudo docker compose up
