@@ -85,6 +85,9 @@ jobs:
         run: |
           docker pull alan01777/todo-app-frontend:latest
           docker pull alan01777/todo-app-backend:latest
-
+      
+      - name: Create .env File to Backend
+        run: cp ./backend/.env.example ./backend/.env
+         
       - name: Create Containers
         run: sudo docker compose up
