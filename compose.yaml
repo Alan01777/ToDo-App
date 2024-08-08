@@ -9,7 +9,7 @@ services:
       - "443:443"
       - "9000:9000"
     volumes:
-      - ./frontend:/var/www/frontend
+      - frontend:/var/www/frontend
       - ./backend:/var/www/backend
       - ./backend/nginx/conf.d/:/etc/nginx/conf.d/
       - ./backend/certbot/www:/var/www/certbot/
@@ -30,19 +30,20 @@ services:
     container_name: backend
     restart: always
     env_file:
-      - ./backend/.env  # Uncomment this if your app needs access to the host filesystem
+      - ./backend/.env # Uncomment this if your app needs access to the host filesystem
     networks:
       - app-network
-  
+
   frontend:
     build:
       dockerfile: dockerfile
       context: ./frontend
     container_name: frontend
     volumes:
-        - ./frontend:/var/www
-  
+      - frontend:/var/www
 
 networks:
   app-network:
     driver: bridge
+volumes:
+  frontend:
