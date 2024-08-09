@@ -98,4 +98,24 @@ class TagRepository implements RepositoryInterface
         }
         $tag->delete($id);
     }
+
+    /**
+     * Find tag titles by their IDs.
+     *
+     * @param mixed $ids The IDs of the tags to find.
+     * @return array The titles of the found tags.
+     */
+    public function findTagTitles($ids)
+    {
+        $tags = [];
+        $ids = is_array($ids) ? $ids : [$ids]; // Ensure $ids is an array
+
+        foreach ($ids as $id) {
+            $tag = $this->tag->where('id', $id)->first();
+            if ($tag) {
+                $tags[] = $tag->title;
+            }
+        }
+        return $tags;
+    }
 }

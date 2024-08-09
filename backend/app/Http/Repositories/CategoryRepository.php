@@ -99,4 +99,24 @@ class CategoryRepository implements RepositoryInterface
         }
         $category->delete($id);
     }
+
+    /**
+     * Retrieve the titles of categories based on their IDs.
+     *
+     * @param int|array $ids The ID(s) of the categories to retrieve.
+     * @return array The titles of the categories.
+     */
+    public function findCategoriesTitles($ids)
+    {
+        $categories = [];
+        $ids = is_array($ids) ? $ids : [$ids];
+
+        foreach ($ids as $id) {
+            $category = $this->category->where('id', $id)->first();
+            if ($category) {
+                $categories[] = $category->title;
+            }
+        }
+        return $categories;
+    }
 }

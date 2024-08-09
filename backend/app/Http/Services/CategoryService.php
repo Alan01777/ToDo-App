@@ -127,6 +127,6 @@ class CategoryService
 
         $prompt = 'Provide a description for the a task category based on the title. The language of the response should be based on the language of the title (probably portuguese). Your response will fill the description on the database, so be direct and do not use prefixes like: "Description", etc.';
 
-        return $this->openAiService->chat($data['title'], $prompt);
+        return $this->openAiService->chat(['title' => $data['title']], $prompt);
     }
 }
