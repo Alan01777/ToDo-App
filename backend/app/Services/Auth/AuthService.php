@@ -11,14 +11,25 @@ class AuthService
 {
     protected $userRepository;
 
+    /**
+     * Create a new instance of AuthService.
+     *
+     * @param UserRepository $userRepository
+     * @return void
+     */
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }
     
+    /**
+     * Register a new user.
+     *
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(AuthRequest $request)
     {
-
         $data = $request->validated();
         $user = $this->userRepository->create($data);
 
@@ -35,6 +46,12 @@ class AuthService
         }
     }
 
+    /**
+     * Log in a user.
+     *
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(AuthRequest $request)
     {
         $data = $request->validated();
@@ -56,11 +73,23 @@ class AuthService
         ]);
     }
 
+    /**
+     * Get the authenticated user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function user(Request $request)
     {
         return response()->json($request->user());
     }
 
+    /**
+     * Log out the authenticated user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
