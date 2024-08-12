@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Auth;
 
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class AuthService
     {
         $this->userRepository = $userRepository;
     }
-    
+
     /**
      * Register a new user.
      *
@@ -81,6 +82,9 @@ class AuthService
      */
     public function user(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(500, ['error' => 'Not Authenticated!']);
+        }
         return response()->json($request->user());
     }
 
@@ -92,6 +96,9 @@ class AuthService
      */
     public function logout(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(500, ['error' => 'Not Authenticated!']);
+        }
         $request->user()->tokens()->delete();
 
         return response()->json([
