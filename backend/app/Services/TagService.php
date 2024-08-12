@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Http\Requests\TagRequest;
 use App\Http\Resources\TagResource;
-use App\Http\Repositories\TagRepository;
+use App\Repositories\TagRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class TagService
@@ -36,7 +37,7 @@ class TagService
      */
     public function index(): AnonymousResourceCollection
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $tags = $this->tagRepository->findAllbyId($user->id);
 
         return TagResource::collection($tags);
@@ -51,7 +52,7 @@ class TagService
     public function store(TagRequest $request): TagResource
     {
         $validatedData = $request->validated();
-        $data = array_merge($validatedData, ['user_id' => auth()->user()->id]);
+        $data = array_merge($validatedData, ['user_id' => Auth::user()->id]);
 
         $tag = $this->tagRepository->create($data);
 
@@ -66,7 +67,7 @@ class TagService
      */
     public function show(int $id): TagResource
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $tag = $this->tagRepository->find($id, $user->id);
 
         return new TagResource($tag);
@@ -81,7 +82,7 @@ class TagService
      */
     public function update(TagRequest $request, int $id): TagResource
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $validatedData = $request->validated();
         $data = array_merge($validatedData, ['user_id' => $user->id]);
 
@@ -98,7 +99,7 @@ class TagService
      */
     public function destroy(int $id): JsonResponse
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $this->tagRepository->delete($id, $user->id);
 
         return response()->json(null, 204);

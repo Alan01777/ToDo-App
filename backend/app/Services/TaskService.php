@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
-use App\Http\Repositories\TaskRepository;
-use App\Http\Services\OpenAiService;
+use App\Repositories\TaskRepository;
+use App\Services\OpenAiService;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class TaskService
@@ -38,7 +39,7 @@ class TaskService
      */
     public function index()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $tasks = $this->taskRepository->findAllbyId($user->id);
         return TaskResource::collection($tasks);
     }
@@ -53,7 +54,7 @@ class TaskService
     {
         $data = $request->validated();
 
-        $data['user_id'] = auth()->user()->id;
+        $data['user_id'] = Auth::user()->id;
         $data['description'] = $this->getDescription($data);
 
         $task = $this->taskRepository->create($data);
@@ -86,7 +87,7 @@ class TaskService
      */
     public function show(int $id)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $task = $this->taskRepository->find($id, $user->id);
         return new TaskResource($task);
     }
@@ -101,7 +102,7 @@ class TaskService
     public function update(TaskRequest $request, int $id)
     {
         $data = $request->validated();
-        $user = auth()->user();
+        $user = Auth::user();
         $task = $this->taskRepository->update($id, $data, $user->id);
         return new TaskResource($task);
     }
@@ -114,7 +115,7 @@ class TaskService
      */
     public function destroy(int $id)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $this->taskRepository->delete($id, $user->id);
         return response()->json(null, 204);
     }

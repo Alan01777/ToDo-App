@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Repositories;
+namespace App\Repositories;
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Contracts\ResourceRepositoryInterface;
 use App\Http\Resources\TagResource;
 use App\Models\Tag;
 
@@ -11,7 +11,7 @@ use App\Models\Tag;
  * Class TagRepository
  * @package App\Http\Respositories
  */
-class TagRepository implements RepositoryInterface
+class TagRepository implements ResourceRepositoryInterface
 {
     private $tag;
 

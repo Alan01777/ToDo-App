@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Repositories\Contracts;
+namespace App\Repositories\Contracts;
 
 /**
  * The RepositoryInterface interface defines the contract for repository classes.
  */
-interface RepositoryInterface
+interface ResourceRepositoryInterface
 {
     /**
      * Retrieve all records owned by the user from the repository.

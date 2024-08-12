@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services\Auth;
 
 use App\Http\Requests\UserRequest;
-use App\Http\Repositories\UserRepository;
+use App\Repositories\UserRepository;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class UserService
@@ -26,38 +27,9 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * Get all users.
-     *
-     * @return UserResource
-     */
-    public function index()
-    {
-        $users = $this->userRepository->findall();
-        return UserResource::collection($users);
-    }
-
-    /**
-     * Store a new user.
-     *
-     * @param UserRequest $request
-     * @return UserResource
-     */
-    public function store(UserRequest $request)
-    {
-        $data = $request->validated();
-        $user = $this->userRepository->create($data);
-        return new UserResource($user);
-    }
-
-    /**
-     * Get a specific user by ID.
-     *
-     * @param int $id
-     * @return UserResource
-     */
     public function show(int $id)
     {
+        $id = Auth::user();
         $user = $this->userRepository->find($id);
         return new UserResource($user);
     }

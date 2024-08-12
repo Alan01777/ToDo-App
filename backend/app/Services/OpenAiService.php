@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use OpenAI\Laravel\Facades\OpenAI;
-use App\Http\Repositories\TagRepository;
-use App\Http\Repositories\CategoryRepository;
+use App\Repositories\TagRepository;
+use App\Repositories\CategoryRepository;
 
 class OpenAiService
 {

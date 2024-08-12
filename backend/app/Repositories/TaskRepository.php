@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Repositories;
+namespace App\Repositories;
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Contracts\ResourceRepositoryInterface;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 
@@ -11,7 +11,7 @@ use App\Models\Task;
  * Class TaskRepository
  * @package App\Http\Respositories
  */
-class TaskRepository implements RepositoryInterface
+class TaskRepository implements ResourceRepositoryInterface
 {
     private $task;
 
@@ -32,7 +32,7 @@ class TaskRepository implements RepositoryInterface
      */
     public function findAllbyId($userId)
     {
-        $tasks = $this->task->with(['user', 'tags', 'categories'])->where('user_id', $userId)->paginate(25);
+        $tasks = $this->task->with(['user', 'tags', 'categories'])->where('user_id', $userId)->paginate(10);
         if (!$tasks) {
             throw new NullValueException('No tasks found!');
         }

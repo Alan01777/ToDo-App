@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Services\Auth\AuthService;
 use App\Http\Requests\AuthRequest;
 use Validator;
 
@@ -19,27 +18,9 @@ class AuthController extends Controller
      * @param  [string] password_confirmation
      * @return [string] message
      */
-    public function register(AuthRequest $request)
+    public function register(AuthRequest $request, AuthService $authService)
     {
-        
-        $data = $request->validated();
-        $user = new User([
-            'name'  => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
-
-        if ($user->save()) {
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->plainTextToken;
-
-            return response()->json([
-                'message' => 'Successfully created user!',
-                'accessToken' => $token,
-            ], 201);
-        } else {
-            return response()->json(['error' => 'Provide proper details']);
-        }
+        return $authService->register($request);
     }
 
     /**
@@ -50,25 +31,9 @@ class AuthController extends Controller
      * @param  [boolean] remember_me
      */
 
-    public function login(AuthRequest $request)
+    public function login(AuthRequest $request, AuthService $authService)
     {
-        $data = $request->validated();
-
-        $credentials = array_intersect_key($data, array_flip(['email', 'password']));
-        if (!Auth::attempt($credentials)) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
-        }
-
-        $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->plainTextToken;
-
-        return response()->json([
-            'accessToken' => $token,
-            'token_type' => 'Bearer',
-        ]);
+       return $authService->login($request);
     }
 
     /**
@@ -76,9 +41,9 @@ class AuthController extends Controller
      *
      * @return [json] user object
      */
-    public function user(Request $request)
+    public function user(Request $request, AuthService $authService)
     {
-        return response()->json($request->user());
+        return $authService->user($request);
     }
 
     /**
@@ -86,12 +51,8 @@ class AuthController extends Controller
      *
      * @return [string] message
      */
-    public function logout(Request $request)
+    public function logout(Request $request, AuthService $authService)
     {
-        $request->user()->tokens()->delete();
-
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
+        return $authService->logout($request);
     }
 }

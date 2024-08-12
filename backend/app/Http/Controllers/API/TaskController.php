@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskRequest;
-use App\Http\Services\TaskService;
+use App\Services\TaskService;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller

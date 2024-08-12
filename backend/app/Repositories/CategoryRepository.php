@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Repositories;
+namespace App\Repositories;
 
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Contracts\ResourceRepositoryInterface;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 
@@ -12,7 +12,7 @@ use App\Models\Category;
  * Class CategoryRepository
  * @package App\Http\Respositories
  */
-class CategoryRepository implements RepositoryInterface
+class CategoryRepository implements ResourceRepositoryInterface
 {
     private $category;
 

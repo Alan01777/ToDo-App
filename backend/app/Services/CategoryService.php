@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Http\Repositories\CategoryRepository;
-use App\Http\Services\OpenAiService;
+use App\Repositories\CategoryRepository;
+use App\Services\OpenAiService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class CategoryService
@@ -44,7 +45,7 @@ class CategoryService
      */
     public function index(): AnonymousResourceCollection
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $categories = $this->categoryRepository->findAllbyId($user->id);
 
         return CategoryResource::collection($categories);
@@ -59,7 +60,7 @@ class CategoryService
     public function store(CategoryRequest $request): CategoryResource
     {
         $validatedData = $request->validated();
-        $data = array_merge($validatedData, ['user_id' => auth()->user()->id]);
+        $data = array_merge($validatedData, ['user_id' => Auth::user()->id]);
         $data['description'] = $this->getDescription($data);
 
         $category = $this->categoryRepository->create($data);
@@ -75,7 +76,7 @@ class CategoryService
      */
     public function show(int $id): CategoryResource
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $category = $this->categoryRepository->find($id, $user->id);
 
         return new CategoryResource($category);
@@ -90,7 +91,7 @@ class CategoryService
      */
     public function update(CategoryRequest $request, int $id): CategoryResource
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $validatedData = $request->validated();
         $data = array_merge($validatedData, ['user_id' => $user->id]);
 
@@ -107,7 +108,7 @@ class CategoryService
      */
     public function destroy(int $id): JsonResponse
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $this->categoryRepository->delete($id, $user->id);
 
         return response()->json(null, 204);
