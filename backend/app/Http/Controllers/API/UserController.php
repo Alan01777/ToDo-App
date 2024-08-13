@@ -14,7 +14,7 @@ class UserController extends Controller
      *
      * @param UserService $userService
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\UserResource
      */
     public function show(UserService $userService, int $id)
     {
@@ -27,7 +27,7 @@ class UserController extends Controller
      * @param UserRequest $request
      * @param UserService $userService
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\UserResource
      */
     public function update(UserRequest $request, UserService $userService, int $id)
     {
@@ -39,7 +39,7 @@ class UserController extends Controller
      *
      * @param UserService $userService
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return null
      */
     public function destroy(UserService $userService, int $id)
     {

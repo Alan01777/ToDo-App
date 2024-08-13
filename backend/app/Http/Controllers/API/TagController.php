@@ -13,7 +13,7 @@ class TagController extends Controller
      * Display a listing of the resource.
      *
      * @param  TagService  $tagService
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(TagService $tagService)
     {
@@ -25,7 +25,7 @@ class TagController extends Controller
      *
      * @param  TagService  $tagService
      * @param  TagRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\TagResource
      */
     public function store(TagService $tagService, TagRequest $request)
     {
@@ -37,7 +37,7 @@ class TagController extends Controller
      *
      * @param  TagService  $tagService
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\TagResource
      */
     public function show(TagService $tagService, int $id)
     {
@@ -50,7 +50,7 @@ class TagController extends Controller
      * @param  TagRequest  $request
      * @param  TagService  $tagService
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\TagResource
      */
     public function update(TagRequest $request, TagService $tagService, int $id)
     {
@@ -62,7 +62,7 @@ class TagController extends Controller
      *
      * @param  TagService  $tagService
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return null
      */
     public function destroy(TagService $tagService, int $id)
     {

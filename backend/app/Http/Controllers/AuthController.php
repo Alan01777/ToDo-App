@@ -9,6 +9,7 @@ use Validator;
 
 class AuthController extends Controller
 {
+    
     /**
      * Create user
      *

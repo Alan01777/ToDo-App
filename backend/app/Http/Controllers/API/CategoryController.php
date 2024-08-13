@@ -13,7 +13,7 @@ class CategoryController extends Controller
      * Display a listing of the resource.
      *
      * @param  \App\Http\Services\CategoryService  $categoryService
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(CategoryService $categoryService)
     {
@@ -25,7 +25,7 @@ class CategoryController extends Controller
      *
      * @param  \App\Http\Services\CategoryService  $categoryService
      * @param  \App\Http\Requests\CategoryRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return App\Http\Resources\CategoryResource
      */
     public function store(CategoryService $categoryService, CategoryRequest $request)
     {
@@ -37,7 +37,7 @@ class CategoryController extends Controller
      *
      * @param  \App\Http\Services\CategoryService  $categoryService
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\CategoryResource
      */
     public function show(CategoryService $categoryService, int $id)
     {
@@ -50,7 +50,7 @@ class CategoryController extends Controller
      * @param  \App\Http\Requests\CategoryRequest  $request
      * @param  \App\Http\Services\CategoryService  $categoryService
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\CategoryResource
      */
     public function update(CategoryRequest $request, CategoryService $categoryService, int $id)
     {
@@ -62,7 +62,7 @@ class CategoryController extends Controller
      *
      * @param  \App\Http\Services\CategoryService  $categoryService
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return null
      */
     public function destroy(CategoryService $categoryService, int $id)
     {
