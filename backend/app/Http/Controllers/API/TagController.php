@@ -9,63 +9,72 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
+    protected $tagService;
+
+    /**
+     * Create a new TagController instance.
+     *
+     * @param  TagService  $tagService
+     * @return void
+     */
+    public function __construct(TagService $tagService)
+    {
+        $this->tagService = $tagService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @param  TagService  $tagService
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(TagService $tagService)
+    public function index()
     {
-        return $tagService->index();
+        return $this->tagService->index();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  TagService  $tagService
      * @param  TagRequest  $request
      * @return \App\Http\Resources\TagResource
      */
-    public function store(TagService $tagService, TagRequest $request)
+    public function store(TagRequest $request)
     {
-        return $tagService->store($request);
+        return $this->tagService->store($request);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  TagService  $tagService
      * @param  int  $id
      * @return \App\Http\Resources\TagResource
      */
-    public function show(TagService $tagService, int $id)
+    public function show(int $id)
     {
-        return $tagService->show($id);
+        return $this->tagService->show($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  TagRequest  $request
-     * @param  TagService  $tagService
      * @param  int  $id
      * @return \App\Http\Resources\TagResource
      */
-    public function update(TagRequest $request, TagService $tagService, int $id)
+    public function update(TagRequest $request, int $id)
     {
-        return $tagService->update($request, $id);
+        return $this->tagService->update($request, $id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  TagService  $tagService
      * @param  int  $id
      * @return null
      */
-    public function destroy(TagService $tagService, int $id)
+    public function destroy(int $id)
     {
-        return $tagService->destroy($id);
+        return $this->tagService->destroy($id);
     }
 }

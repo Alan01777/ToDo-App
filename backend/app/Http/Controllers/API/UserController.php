@@ -9,40 +9,49 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    /**
+     * UserController constructor.
+     *
+     * @param UserService $userService
+     */
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display the specified resource.
      *
-     * @param UserService $userService
-     * @param int $id
-     * @return \App\Http\Resources\UserResource
+     * @param int $id The ID of the user to display.
+     * @return \App\Http\Resources\UserResource The user resource.
      */
-    public function show(UserService $userService, int $id)
+    public function show(int $id)
     {
-        return $userService->show($id);
+        return $this->userService->show($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param UserRequest $request
-     * @param UserService $userService
-     * @param int $id
-     * @return \App\Http\Resources\UserResource
+     * @param UserRequest $request The request object containing the user data.
+     * @param int $id The ID of the user to update.
+     * @return \App\Http\Resources\UserResource The updated user resource.
      */
-    public function update(UserRequest $request, UserService $userService, int $id)
+    public function update(UserRequest $request, int $id)
     {
-        return $userService->update($request, $id);
+        return $this->userService->update($request, $id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param UserService $userService
-     * @param int $id
+     * @param int $id The ID of the user to remove.
      * @return null
      */
-    public function destroy(UserService $userService, int $id)
+    public function destroy(int $id)
     {
-        return $userService->destroy($id);
+        return $this->userService->destroy($id);
     }
 }

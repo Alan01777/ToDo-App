@@ -9,51 +9,54 @@ use Validator;
 
 class AuthController extends Controller
 {
-    
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * Create user
      *
-     * @param  [string] name
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [string] password_confirmation
+     * @param  \App\Http\Requests\AuthRequest  $request
      * @return [string] message
      */
-    public function register(AuthRequest $request, AuthService $authService)
+    public function register(AuthRequest $request)
     {
-        return $authService->register($request);
+        return $this->authService->register($request);
     }
 
     /**
      * Login user and create token
      *
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [boolean] remember_me
+     * @param  \App\Http\Requests\AuthRequest  $request
+     * @return [string] message
      */
-
-    public function login(AuthRequest $request, AuthService $authService)
+    public function login(AuthRequest $request)
     {
-       return $authService->login($request);
+        return $this->authService->login($request);
     }
 
     /**
      * Get the authenticated User
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return [json] user object
      */
-    public function user(Request $request, AuthService $authService)
+    public function user(Request $request)
     {
-        return $authService->user($request);
+        return $this->authService->user($request);
     }
 
     /**
      * Logout user (Revoke the token)
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return [string] message
      */
-    public function logout(Request $request, AuthService $authService)
+    public function logout(Request $request)
     {
-        return $authService->logout($request);
+        return $this->authService->logout($request);
     }
 }
