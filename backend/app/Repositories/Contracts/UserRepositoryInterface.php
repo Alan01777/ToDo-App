@@ -10,7 +10,7 @@ interface UserRepositoryInterface
      * @param array $data The user data.
      * @return mixed The created user.
      */
-    public function create($data);
+    public function create(array $data): mixed;
 
     /**
      * Find a user by ID.
@@ -18,7 +18,7 @@ interface UserRepositoryInterface
      * @param int $userId The user ID.
      * @return mixed The found user.
      */
-    public function find($userId);
+    public function find(int $userId): mixed ;
 
     /**
      * Update a user.
@@ -27,13 +27,13 @@ interface UserRepositoryInterface
      * @param array $data The updated user data.
      * @return mixed The updated user.
      */
-    public function update($userId, $data);
+    public function update(int $userId, array $data): mixed;
 
     /**
      * Delete a user.
      *
      * @param int $userId The user ID.
-     * @return bool True if the user was deleted successfully, false otherwise.
+     * @return null return null if the user was deleted successfully
      */
-    public function delete($userId);
+    public function delete(int $userId): null;
 }

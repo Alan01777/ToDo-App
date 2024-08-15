@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\TagRequest;
 use App\Http\Resources\TagResource;
 use App\Repositories\TagRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -18,7 +20,7 @@ class TagService
     /**
      * @var TagRepository
      */
-    protected $tagRepository;
+    protected TagRepository $tagRepository;
 
     /**
      * TagService constructor.
@@ -34,6 +36,7 @@ class TagService
      * Get all Tags.
      *
      * @return AnonymousResourceCollection
+     * @throws NullValueException
      */
     public function index(): AnonymousResourceCollection
     {
@@ -64,11 +67,13 @@ class TagService
      *
      * @param int $id
      * @return TagResource
+     * @throws NullValueException
      */
     public function show(int $id): TagResource
     {
         $user = Auth::user();
         $tag = $this->tagRepository->find($id, $user->id);
+
 
         return new TagResource($tag);
     }
@@ -79,6 +84,7 @@ class TagService
      * @param TagRequest $request
      * @param int $id
      * @return TagResource
+     * @throws NullValueException
      */
     public function update(TagRequest $request, int $id): TagResource
     {
@@ -96,12 +102,13 @@ class TagService
      *
      * @param int $id
      * @return JsonResponse
+     * @throws NullValueException
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id): Response
     {
         $user = Auth::user();
         $this->tagRepository->delete($id, $user->id);
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 }

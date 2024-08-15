@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 
 use App\Http\Exceptions\NullValueException;
-use App\Repositories\Contracts\ResourceRepositoryInterface;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Illuminate\Http\Response;
+use App\Repositories\Contracts\ResourceRepositoryInterface;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * Class CategoryRepository
@@ -14,7 +16,7 @@ use App\Models\Category;
  */
 class CategoryRepository implements ResourceRepositoryInterface
 {
-    private $category;
+    private Category $category;
 
     /**
      * TaskRepository constructor.
@@ -26,12 +28,12 @@ class CategoryRepository implements ResourceRepositoryInterface
     }
 
     /**
-     * Get all Categories.
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator The paginated list of users.
-     * @throws NullValueException
+     * Get all Categories owned by the current user.
+     * @param int $userId The id of the current logged user.
+     * @return AnonymousResourceCollection The paginated list of categories owned by the user.
+     * @throws NullValueException Throws an exception if no category is found.
      */
-    public function findAllbyId($userId)
+    public function findAllById(int $userId): AnonymousResourceCollection
     {
         $categories = $this->category->with('tasks')->where('user_id', $userId)->paginate(25);
         if (!$categories) {
@@ -46,58 +48,57 @@ class CategoryRepository implements ResourceRepositoryInterface
      * @param array $data
      * @return Category
      */
-    public function create($data)
+    public function create(array $data): Category
     {
         return $this->category->create($data);
     }
 
     /**
-     * Find a Category by ID.
+     * Update a Category by ID.
      *
-     * @param int $id
-     * @return CategoryResource
-     * @throws NullValueException
+     * @param int $id The id of the category which will be updated
+     * @param array $data The data which will update the category
+     * @param int $userId The id of the current user.
+     * @return CategoryResource The resource which return the data of the category.
+     * @throws NullValueException Throws an exception if no category is found.
      */
-    public function find($id, $userId)
+    public function update(int $id, array $data, int $userId): CategoryResource
     {
-        $category = $this->category->where('user_id', $userId)->where('id', $id)->first();
-        if (!$category) {
-            throw new NullValueException('No Category found with id' . $id);
-        }
-        return $category;
+        $category = $this->find($id, $userId);
+        $category->update($data);
+        return new CategoryResource($category);
     }
 
     /**
-     * Update a Category by ID.
+     * Find a Category by ID.
      *
-     * @param array $data
-     * @param int $id
-     * @return CategoryResource
-     * @throws NullValueException
+     * @param int $id The id of the category to find.
+     * @param int $userId The id of the current user.
+     * @return CategoryResource The resource which return the data of the category.
+     * @throws NullValueException Throws an exception if no category is found.
      */
-    public function update($id, $data, $userId)
+    public function find(int $id, int $userId): CategoryResource
     {
-        $category = $this->find($id, $userId); // Call the find method using $this
+        $category = $this->category->where('user_id', $userId)->where('id', $id)->first();
         if (!$category) {
-            throw new NullValueException('No Category found with id: ' . $id);
+            throw new NullValueException('No Category found with id ' . $id);
         }
-        $category->update($data);
         return new CategoryResource($category);
     }
 
     /**
      * Delete a Category by ID.
      *
-     * @param int $id
-     * @throws NullValueException
+     * @param int $id The id of the category which will be updated
+     * @param int $userId The id of the current user.
+     * @return Response Return 204 (no content)
+     * @throws NullValueException Throws an exception if no category is found.
      */
-    public function delete($id, $userId)
+    public function delete(int $id, int $userId): Response
     {
         $category = $this->find($id, $userId);
-        if (!$category) {
-            throw new NullValueException('No Category found with id' . $id);
-        }
         $category->delete($id);
+        return response()->noContent();
     }
 
     /**
@@ -106,7 +107,7 @@ class CategoryRepository implements ResourceRepositoryInterface
      * @param int|array $ids The ID(s) of the categories to retrieve.
      * @return array The titles of the categories.
      */
-    public function findCategoriesTitles($ids)
+    public function findCategoriesTitles(int|array $ids): array
     {
         $categories = [];
         $ids = is_array($ids) ? $ids : [$ids];

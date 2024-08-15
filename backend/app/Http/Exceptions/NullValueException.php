@@ -4,6 +4,7 @@ namespace App\Http\Exceptions;
 
 use Exception;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class NullValueException extends Exception
 {
@@ -16,6 +17,6 @@ class NullValueException extends Exception
     {
         return response()->json([
             'error' => $this->getMessage(),
-        ], Response::HTTP_NOT_FOUND);
+        ], ResponseAlias::HTTP_NOT_FOUND);
     }
 }

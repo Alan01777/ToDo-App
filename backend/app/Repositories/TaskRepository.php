@@ -3,9 +3,12 @@
 namespace App\Repositories;
 
 use App\Http\Exceptions\NullValueException;
-use App\Repositories\Contracts\ResourceRepositoryInterface;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use App\Repositories\Contracts\ResourceRepositoryInterface;
+use Auth;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 /**
  * Class TaskRepository
@@ -13,7 +16,7 @@ use App\Models\Task;
  */
 class TaskRepository implements ResourceRepositoryInterface
 {
-    private $task;
+    private Task $task;
 
     /**
      * TaskRepository constructor.
@@ -27,10 +30,10 @@ class TaskRepository implements ResourceRepositoryInterface
     /**
      * Get all tasks.
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator The paginated list of users.
+     * @return AnonymousResourceCollection The paginated list of users.
      * @throws NullValueException
      */
-    public function findAllbyId($userId)
+    public function findAllById(int $userId): AnonymousResourceCollection
     {
         $tasks = $this->task->with(['user', 'tags', 'categories'])->where('user_id', $userId)->paginate(10);
         if (!$tasks) {
@@ -39,16 +42,17 @@ class TaskRepository implements ResourceRepositoryInterface
         return TaskResource::collection($tasks);
     }
 
-
-
     /**
      * Create a new task.
      *
-     * @param array $data
-     * @return Task
+     * @param array $data The data to create the task
+     * @return Task The resource which will the return the updated task data
+     * @throws NullValueException
      */
-    public function create($data)
+    public function create(array $data): Task
     {
+
+
         $task = $this->task->create($data);
 
         if (isset($data['tag_id'])) {
@@ -62,39 +66,18 @@ class TaskRepository implements ResourceRepositoryInterface
         return $task;
     }
 
-
-    /**
-     * Find a task by ID.
-     *
-     * @param int $id
-     * @param int $userId
-     * @return TaskResource
-     * @throws NullValueException
-     */
-    public function find($id, $userId)
-    {
-        $task = $this->task->with(['tags', 'categories'])->where('id', $id)->where('user_id', $userId)->first();
-        if (!$task) {
-            throw new NullValueException('No task found with id' . $id);
-        }
-        return $task;
-    }
-
     /**
      * Update a task by ID.
      *
-     * @param array $data
-     * @param int $id
-     * @param int $userId
-     * @return TaskResource
-     * @throws NullValueException
+     * @param int $id The id of the Task to Update
+     * @param array $data The data to update the task
+     * @param int $userId The id of the current user
+     * @return TaskResource The resource which will the return the updated task data
+     * @throws NullValueException Throws an exception if no Task is found
      */
-    public function update($id, $data, $userId)
+    public function update(int $id, array $data, int $userId): TaskResource
     {
         $task = $this->find($id, $userId);
-        if (!$task) {
-            throw new NullValueException('No task found with id: ' . $id);
-        }
 
         $task->update($data);
 
@@ -110,18 +93,34 @@ class TaskRepository implements ResourceRepositoryInterface
     }
 
     /**
-     * Delete a task by ID.
+     * Find a task by ID.
      *
-     * @param int $id
-     * @param int $userId
-     * @throws NullValueException
+     * @param int $id The id of the Task to find
+     * @param int $userId The id of the current user
+     * @return TaskResource The resource which will the return the updated task data
+     * @throws NullValueException Throws an exception if no Task is found
      */
-    public function delete($id, $userId)
+    public function find(int $id, int $userId): TaskResource
     {
-        $task = $this->find($id, $userId);
+        $task = $this->task->with(['tags', 'categories'])->where('id', $id)->where('user_id', $userId)->first();
         if (!$task) {
             throw new NullValueException('No task found with id' . $id);
         }
+        return $task;
+    }
+
+    /**
+     * Delete a task by ID.
+     *
+     * @param int $id The id of the task to delete
+     * @param int $userId The id of the current user
+     * @return Response Return 204 (no content)
+     * @throws NullValueException Throws an exception if no Task is found
+     */
+    public function delete(int $id, int $userId): Response
+    {
+        $task = $this->find($id, $userId);
         $task->delete($id);
+        return response()->noContent();
     }
 }

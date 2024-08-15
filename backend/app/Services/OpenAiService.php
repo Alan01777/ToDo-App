@@ -8,8 +8,8 @@ use App\Repositories\CategoryRepository;
 
 class OpenAiService
 {
-    protected $tagRepository;
-    protected $categoryRepository;
+    protected TagRepository $tagRepository;
+    protected CategoryRepository $categoryRepository;
 
     /**
      * Create a new OpenAiService instance.
@@ -27,10 +27,10 @@ class OpenAiService
     /**
      * Find tags by their IDs.
      *
-     * @param  array  $tagIds
+     * @param array $tagIds
      * @return array
      */
-    private function findTags($tagIds)
+    private function findTags(array $tagIds): array
     {
         return $this->tagRepository->findTagTitles($tagIds);
     }
@@ -38,10 +38,10 @@ class OpenAiService
     /**
      * Find categories by their IDs.
      *
-     * @param  array  $categoryIds
+     * @param array $categoryIds
      * @return array
      */
-    private function findCategories($categoryIds)
+    private function findCategories(array $categoryIds): array
     {
         return $this->categoryRepository->findCategoriesTitles($categoryIds);
     }
@@ -53,7 +53,7 @@ class OpenAiService
      * @return void
      * @throws \InvalidArgumentException
      */
-    private function validateChatParameters($chatParameters)
+    private function validateChatParameters(mixed $chatParameters): void
     {
         if (!is_array($chatParameters)) {
             throw new \InvalidArgumentException('Chat parameters must be an array.');
@@ -66,7 +66,7 @@ class OpenAiService
      * @param  mixed  $chatParameters
      * @return array
      */
-    private function convertChatParameters($chatParameters)
+    private function convertChatParameters(mixed $chatParameters): array
     {
         if (is_string($chatParameters)) {
             return json_decode($chatParameters, true);
@@ -79,10 +79,10 @@ class OpenAiService
      * Perform a chat with the OpenAI model.
      *
      * @param  mixed  $chatParameters
-     * @param  string  $prompt
+     * @param string $prompt
      * @return string
      */
-    public function chat($chatParameters, $prompt)
+    public function chat(mixed $chatParameters, string $prompt): string
     {
         $chatParameters = $this->convertChatParameters($chatParameters);
         $this->validateChatParameters($chatParameters);

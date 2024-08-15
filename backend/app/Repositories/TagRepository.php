@@ -6,6 +6,8 @@ use App\Http\Exceptions\NullValueException;
 use App\Repositories\Contracts\ResourceRepositoryInterface;
 use App\Http\Resources\TagResource;
 use App\Models\Tag;
+use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * Class TagRepository
@@ -13,7 +15,7 @@ use App\Models\Tag;
  */
 class TagRepository implements ResourceRepositoryInterface
 {
-    private $tag;
+    private Tag $tag;
 
     /**
      * TaskRepository constructor.
@@ -27,10 +29,11 @@ class TagRepository implements ResourceRepositoryInterface
     /**
      * Get all tags.
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator The paginated list of users.
-     * @throws NullValueException
+     * @param int $userId The id of the current user.
+     * @return AnonymousResourceCollection The paginated list of Tags
+     * @throws NullValueException throws an exception if no Tag is found
      */
-    public function findAllbyId($userId)
+    public function findAllById(int $userId): AnonymousResourceCollection
     {
         $tags = $this->tag->with('tasks')->where('user_id', $userId)->paginate(25);
         if (!$tags) {
@@ -40,12 +43,12 @@ class TagRepository implements ResourceRepositoryInterface
     }
 
     /**
-     * Create a new task.
+     * Create a new Tag.
      *
-     * @param array $data
-     * @return Tag
+     * @param array $data The data to create a new Tag
+     * @return Tag The tag which will return the Tag data
      */
-    public function create($data)
+    public function create(array $data): Tag
     {
         return $this->tag->create($data);
     }
@@ -53,33 +56,31 @@ class TagRepository implements ResourceRepositoryInterface
     /**
      * Find a tag by ID.
      *
-     * @param int $id
-     * @return TagResource
-     * @throws NullValueException
+     * @param int $id The id of the Tag to find
+     * @param int $userId The id of the current user
+     * @return TagResource The resource which will return the Tag data
+     * @throws NullValueException throws an exception if no Tag is found
      */
-    public function find($id, $userId)
+    public function find(int $id, int $userId): TagResource
     {
         $tag = $this->tag->where('id', $id)->where('user_id', $userId)->first();
         if (!$tag) {
-            throw new NullValueException('No tag found with id' . $id);
+            throw new NullValueException('No tag found with id ' . $id);
         }
-        return $tag;
+        return new TagResource($tag);
     }
 
     /**
      * Update a tag by ID.
      *
-     * @param array $data
-     * @param int $id
-     * @return TagResource
-     * @throws NullValueException
+     * @param array $data The data to create a new Tag
+     * @param int $id The id of the Tag which will be updated
+     * @return TagResource The resource which will return the Tag data
+     * @throws NullValueException throws an exception if no Tag is found
      */
-    public function update($id, $data, $userId)
+    public function update(int $id, array $data, int $userId): TagResource
     {
         $tag = $this->find($id, $userId);
-        if (!$tag) {
-            throw new NullValueException('No tag found with id: ' . $id);
-        }
         $tag->update($data);
         return new TagResource($tag);
     }
@@ -87,28 +88,28 @@ class TagRepository implements ResourceRepositoryInterface
     /**
      * Delete a tag by ID.
      *
-     * @param int $id
+     * @param int $id The id of the Tag to delete
+     * @param int $userId The id of the current user
+     * @return Response Return a 204 code (no content)
      * @throws NullValueException
      */
-    public function delete($id, $userId)
+    public function delete(int $id, int $userId): Response
     {
         $tag = $this->find($id, $userId);
-        if (!$tag) {
-            throw new NullValueException('No tag found with id' . $id);
-        }
         $tag->delete($id);
+        return response()->noContent();
     }
 
     /**
      * Find tag titles by their IDs.
      *
-     * @param mixed $ids The IDs of the tags to find.
+     * @param int|array $ids The IDs of the tags to find.
      * @return array The titles of the found tags.
      */
-    public function findTagTitles($ids)
+    public function findTagTitles(int|array $ids): array
     {
         $tags = [];
-        $ids = is_array($ids) ? $ids : [$ids]; // Ensure $ids is an array
+        $ids = is_array($ids) ? $ids : [$ids];
 
         foreach ($ids as $id) {
             $tag = $this->tag->where('id', $id)->first();

@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Services\Auth\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
-    protected $userService;
+    protected UserService $userService;
 
     /**
      * UserController constructor.
@@ -25,9 +28,10 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param int $id The ID of the user to display.
-     * @return \App\Http\Resources\UserResource The user resource.
+     * @return UserResource The user resource.
+     * @throws NullValueException
      */
-    public function show(int $id)
+    public function show(int $id): UserResource
     {
         return $this->userService->show($id);
     }
@@ -37,9 +41,10 @@ class UserController extends Controller
      *
      * @param UserRequest $request The request object containing the user data.
      * @param int $id The ID of the user to update.
-     * @return \App\Http\Resources\UserResource The updated user resource.
+     * @return UserResource The updated user resource.
+     * @throws NullValueException
      */
-    public function update(UserRequest $request, int $id)
+    public function update(UserRequest $request, int $id): UserResource
     {
         return $this->userService->update($request, $id);
     }
@@ -48,10 +53,12 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id The ID of the user to remove.
-     * @return null
+     * @return Response
+     * @throws NullValueException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): Response
     {
-        return $this->userService->destroy($id);
+        $this->userService->destroy($id);
+        return response()->noContent();
     }
 }

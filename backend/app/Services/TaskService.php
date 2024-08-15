@@ -2,23 +2,27 @@
 
 namespace App\Services;
 
+use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Repositories\TaskRepository;
-use App\Services\OpenAiService;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * Class TaskService
- * 
+ *
  * This class is responsible for handling the business logic related to tasks.
  * It interacts with the TaskRepository to perform CRUD operations on tasks.
  * It also uses the OpenAiService to generate task descriptions based on titles.
  */
 class TaskService
 {
-    protected $taskRepository;
-    protected $openAiService;
+    protected TaskRepository $taskRepository;
+    protected OpenAiService $openAiService;
+    protected TagService $tagService;
+    protected CategoryService $categoryService;
 
     /**
      * TaskService constructor.
@@ -26,18 +30,21 @@ class TaskService
      * @param TaskRepository $taskRepository The task repository instance.
      * @param OpenAiService $openAiService The OpenAI service instance.
      */
-    public function __construct(TaskRepository $taskRepository, OpenAiService $openAiService)
+    public function __construct(TaskRepository $taskRepository, OpenAiService $openAiService, TagService $tagService, CategoryService $categoryService)
     {
         $this->taskRepository = $taskRepository;
         $this->openAiService = $openAiService;
+        $this->tagService = $tagService;
+        $this->categoryService = $categoryService;
     }
 
     /**
      * Get all tasks for the authenticated user.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection The collection of tasks as a JSON resource.
+     * @return AnonymousResourceCollection The collection of tasks as a JSON resource.
+     * @throws NullValueException
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $user = Auth::user();
         $tasks = $this->taskRepository->findAllbyId($user->id);
@@ -49,11 +56,12 @@ class TaskService
      *
      * @param TaskRequest $request The task request instance.
      * @return TaskResource The newly created task as a JSON resource.
+     * @throws NullValueException
      */
-    public function store(TaskRequest $request)
+    public function store(TaskRequest $request): TaskResource
     {
         $data = $request->validated();
-
+        $this->dataIsValid($data);
         $data['user_id'] = Auth::user()->id;
         $data['description'] = $this->getDescription($data);
 
@@ -63,14 +71,51 @@ class TaskService
     }
 
     /**
+     * Verifies if the provided category or tag Ids are valid
+     *
+     * @param array $data
+     * @return bool
+     * @throws NullValueException
+     */
+    private function dataIsValid(array $data): bool
+    {
+        foreach ($data['tag_id'] as $tag_id) {
+            if (!$this->tagService->show($tag_id)) {
+                return false;
+            }
+        }
+
+        foreach ($data['category_id'] as $category_id) {
+            if (!$this->categoryService->show($category_id)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get a specific task by ID.
+     *
+     * @param int $id The task ID.
+     * @return TaskResource The task as a JSON resource.
+     * @throws NullValueException
+     */
+    public function show(int $id): TaskResource
+    {
+        $user = Auth::user();
+        $task = $this->taskRepository->find($id, $user->id);
+        return new TaskResource($task);
+    }
+
+    /**
      * Get the description for the task.
      *
      * @param array $data The task data.
      * @return string The task description.
      */
-    private function getDescription($data)
+    private function getDescription(array $data): string
     {
-        if (isset($data['description']) && !empty($data['description'])) {
+        if (!empty($data['description'])) {
             return $data['description'];
         }
 
@@ -80,26 +125,14 @@ class TaskService
     }
 
     /**
-     * Get a specific task by ID.
-     *
-     * @param int $id The task ID.
-     * @return TaskResource The task as a JSON resource.
-     */
-    public function show(int $id)
-    {
-        $user = Auth::user();
-        $task = $this->taskRepository->find($id, $user->id);
-        return new TaskResource($task);
-    }
-
-    /**
      * Update a task.
      *
      * @param TaskRequest $request The task request instance.
      * @param int $id The task ID.
      * @return TaskResource The updated task as a JSON resource.
+     * @throws NullValueException
      */
-    public function update(TaskRequest $request, int $id)
+    public function update(TaskRequest $request, int $id): TaskResource
     {
         $data = $request->validated();
         $user = Auth::user();
@@ -111,12 +144,13 @@ class TaskService
      * Delete a task.
      *
      * @param int $id The task ID.
-     * @return \Illuminate\Http\JsonResponse The JSON response.
+     * @return Response
+     * @throws NullValueException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): Response
     {
         $user = Auth::user();
         $this->taskRepository->delete($id, $user->id);
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 }

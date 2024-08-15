@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AuthRequest;
@@ -10,7 +11,7 @@ use Validator;
 
 class AuthService
 {
-    protected $userRepository;
+    protected UserRepository $userRepository;
 
     /**
      * Create a new instance of AuthService.
@@ -27,9 +28,9 @@ class AuthService
      * Register a new user.
      *
      * @param AuthRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function register(AuthRequest $request)
+    public function register(AuthRequest $request): JsonResponse
     {
         $data = $request->validated();
         $user = $this->userRepository->create($data);
@@ -51,9 +52,9 @@ class AuthService
      * Log in a user.
      *
      * @param AuthRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function login(AuthRequest $request)
+    public function login(AuthRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -78,9 +79,9 @@ class AuthService
      * Get the authenticated user.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function user(Request $request)
+    public function user(Request $request): JsonResponse
     {
         if (!Auth::check()) {
             return response()->json(500, ['error' => 'Not Authenticated!']);
@@ -92,9 +93,9 @@ class AuthService
      * Log out the authenticated user.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         if (!Auth::check()) {
             return response()->json(500, ['error' => 'Not Authenticated!']);

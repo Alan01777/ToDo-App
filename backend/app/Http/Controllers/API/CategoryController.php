@@ -3,18 +3,22 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
-    protected $categoryService;
+    protected CategoryService $categoryService;
 
     /**
      * Create a new CategoryController instance.
      *
-     * @param  \App\Services\CategoryService  $categoryService
+     * @param CategoryService $categoryService
      * @return void
      */
     public function __construct(CategoryService $categoryService)
@@ -25,10 +29,10 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Services\CategoryService  $categoryService
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws NullValueException
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return $this->categoryService->index();
     }
@@ -36,10 +40,10 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\CategoryRequest  $request
-     * @return \App\Http\Resources\CategoryResource
+     * @param CategoryRequest $request
+     * @return CategoryResource
      */
-    public function store(CategoryRequest $request)
+    public function store(CategoryRequest $request): CategoryResource
     {
         return $this->categoryService->store($request);
     }
@@ -47,10 +51,11 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \App\Http\Resources\CategoryResource
+     * @param int $id
+     * @return CategoryResource
+     * @throws NullValueException
      */
-    public function show(int $id)
+    public function show(int $id): CategoryResource
     {
         return $this->categoryService->show($id);
     }
@@ -58,11 +63,12 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\CategoryRequest  $request
-     * @param  int  $id
-     * @return \App\Http\Resources\CategoryResource
+     * @param CategoryRequest $request
+     * @param int $id
+     * @return CategoryResource
+     * @throws NullValueException
      */
-    public function update(CategoryRequest $request, int $id)
+    public function update(CategoryRequest $request, int $id): CategoryResource
     {
         return $this->categoryService->update($request, $id);
     }
@@ -70,11 +76,13 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return null
+     * @param int $id
+     * @return Response
+     * @throws NullValueException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): Response
     {
-        return $this->categoryService->destroy($id);
+        $this->categoryService->destroy($id);
+        return response()->noContent();
     }
 }

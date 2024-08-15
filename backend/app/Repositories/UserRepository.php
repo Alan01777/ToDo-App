@@ -8,7 +8,7 @@ use App\Models\User;
 
 class UserRepository implements UserRepositoryInterface
 {
-    private $user;
+    private User $user;
 
     /**
      * UserRepository constructor.
@@ -26,7 +26,7 @@ class UserRepository implements UserRepositoryInterface
      * @param array $data The data for creating the user.
      * @return User The created user.
      */
-    public function create($data)
+    public function create(array $data): User
     {
         $user = new $this->user([
             'name'  => $data['name'],
@@ -45,7 +45,7 @@ class UserRepository implements UserRepositoryInterface
      * @return User The found user.
      * @throws NullValueException If no user is found with the given ID.
      */
-    public function find($userId)
+    public function find(int $userId): User
     {
         $user = $this->user->with('tasks')->where('id', $userId)->first();
         if (!$user) {
@@ -62,7 +62,7 @@ class UserRepository implements UserRepositoryInterface
      * @return User The updated user.
      * @throws NullValueException If no user is found with the given ID.
      */
-    public function update($userId, $data)
+    public function update(int $userId, array $data): User
     {
         $user = $this->user->find($userId);
         if (!$user) {
@@ -78,12 +78,13 @@ class UserRepository implements UserRepositoryInterface
      * @param int $userId The ID of the user to delete.
      * @throws NullValueException If no user is found with the given ID.
      */
-    public function delete($userId)
+    public function delete(int $userId): null
     {
         $user = $this->user->find($userId);
         if (!$user) {
             throw new NullValueException('No user found with id' . $userId);
         }
         $user->delete();
+        return null;
     }
 }

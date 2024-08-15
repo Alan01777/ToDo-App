@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Repositories\CategoryRepository;
 use App\Services\OpenAiService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -19,12 +21,12 @@ class CategoryService
     /**
      * @var CategoryRepository
      */
-    protected $categoryRepository;
+    protected CategoryRepository $categoryRepository;
 
     /**
      * @var OpenAiService
      */
-    protected $openAiService;
+    protected OpenAiService $openAiService;
 
     /**
      * CategoryService constructor.
@@ -41,7 +43,8 @@ class CategoryService
     /**
      * Get all Categories.
      *
-     * @return CategoryResource
+     * @return AnonymousResourceCollection
+     * @throws NullValueException
      */
     public function index(): AnonymousResourceCollection
     {
@@ -73,6 +76,7 @@ class CategoryService
      *
      * @param int $id
      * @return CategoryResource
+     * @throws NullValueException
      */
     public function show(int $id): CategoryResource
     {
@@ -88,6 +92,7 @@ class CategoryService
      * @param CategoryRequest $request
      * @param int $id
      * @return CategoryResource
+     * @throws NullValueException
      */
     public function update(CategoryRequest $request, int $id): CategoryResource
     {
@@ -104,14 +109,15 @@ class CategoryService
      * Delete a Category.
      *
      * @param int $id
-     * @return JsonResponse
+     * @return Response
+     * @throws NullValueException
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id): Response
     {
         $user = Auth::user();
         $this->categoryRepository->delete($id, $user->id);
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 
     /**
@@ -122,7 +128,7 @@ class CategoryService
      */
     private function getDescription(array $data): string
     {
-        if (isset($data['description']) && !empty($data['description'])) {
+        if (!empty($data['description'])) {
             return $data['description'];
         }
 

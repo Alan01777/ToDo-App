@@ -2,9 +2,11 @@
 
 namespace App\Services\Auth;
 
+use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\UserRequest;
 use App\Repositories\UserRepository;
 use App\Http\Resources\UserResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -16,7 +18,7 @@ class UserService
     /**
      * @var UserRepository
      */
-    protected $userRepository;
+    protected UserRepository $userRepository;
 
     /**
      * UserService constructor.
@@ -27,7 +29,12 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function show(int $id)
+    /**
+     * @param int $id
+     * @return UserResource
+     * @throws NullValueException
+     */
+    public function show(int $id): UserResource
     {
         $id = Auth::user()->id;
         $user = $this->userRepository->find($id);
@@ -40,8 +47,9 @@ class UserService
      * @param UserRequest $request
      * @param int $id
      * @return UserResource
+     * @throws NullValueException
      */
-    public function update(UserRequest $request, int $id)
+    public function update(UserRequest $request, int $id): UserResource
     {
         $data = $request->validated();
         $user = $this->userRepository->update($id, $data);
@@ -52,9 +60,10 @@ class UserService
      * Delete a user.
      *
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws NullValueException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $this->userRepository->delete($id);
         return response()->json(null, 204);

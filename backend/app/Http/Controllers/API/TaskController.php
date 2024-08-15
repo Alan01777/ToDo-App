@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\TaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class TaskController extends Controller
 {
-    protected $taskService;
+    protected TaskService $taskService;
 
     /**
      * TaskController constructor.
@@ -24,10 +28,10 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param TaskService $taskService
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws NullValueException
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return $this->taskService->index();
     }
@@ -36,9 +40,9 @@ class TaskController extends Controller
      * Store a newly created resource in storage.
      *
      * @param TaskRequest $request
-     * @return \App\Http\Resources\TaskResource
+     * @return TaskResource
      */
-    public function store(TaskRequest $request)
+    public function store(TaskRequest $request): TaskResource
     {
         return $this->taskService->store($request);
     }
@@ -47,9 +51,10 @@ class TaskController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \App\Http\Resources\TaskResource
+     * @return TaskResource
+     * @throws NullValueException
      */
-    public function show(int $id)
+    public function show(int $id): TaskResource
     {
         return $this->taskService->show($id);
     }
@@ -59,9 +64,10 @@ class TaskController extends Controller
      *
      * @param TaskRequest $request
      * @param int $id
-     * @return \App\Http\Resources\TaskResource
+     * @return TaskResource
+     * @throws NullValueException
      */
-    public function update(TaskRequest $request, int $id)
+    public function update(TaskRequest $request, int $id): TaskResource
     {
         return $this->taskService->update($request, $id);
     }
@@ -70,10 +76,12 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return null
+     * @return Response
+     * @throws NullValueException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): Response
     {
-        return $this->taskService->destroy($id);
+        $this->taskService->destroy($id);
+        return response()->noContent();
     }
 }

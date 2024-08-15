@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\TagRequest;
+use App\Http\Resources\TagResource;
 use App\Services\TagService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class TagController extends Controller
 {
-    protected $tagService;
+    protected TagService $tagService;
 
     /**
      * Create a new TagController instance.
@@ -25,10 +29,10 @@ class TagController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  TagService  $tagService
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws NullValueException
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return $this->tagService->index();
     }
@@ -37,9 +41,9 @@ class TagController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  TagRequest  $request
-     * @return \App\Http\Resources\TagResource
+     * @return TagResource
      */
-    public function store(TagRequest $request)
+    public function store(TagRequest $request): TagResource
     {
         return $this->tagService->store($request);
     }
@@ -47,10 +51,11 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \App\Http\Resources\TagResource
+     * @param int $id
+     * @return TagResource
+     * @throws NullValueException
      */
-    public function show(int $id)
+    public function show(int $id): TagResource
     {
         return $this->tagService->show($id);
     }
@@ -58,11 +63,12 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  TagRequest  $request
-     * @param  int  $id
-     * @return \App\Http\Resources\TagResource
+     * @param TagRequest $request
+     * @param int $id
+     * @return TagResource
+     * @throws NullValueException
      */
-    public function update(TagRequest $request, int $id)
+    public function update(TagRequest $request, int $id): TagResource
     {
         return $this->tagService->update($request, $id);
     }
@@ -70,10 +76,11 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return null
+     * @param int $id
+     * @return Response
+     * @throws NullValueException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): Response
     {
         return $this->tagService->destroy($id);
     }
