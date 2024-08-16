@@ -63,8 +63,8 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param CategoryRequest $request
-     * @param int $id
+     * @param CategoryRequest $request The request sent by the user
+     * @param int $id The id of the category to Update
      * @return CategoryResource
      * @throws NullValueException
      */

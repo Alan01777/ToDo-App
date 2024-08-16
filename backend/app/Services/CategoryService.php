@@ -12,20 +12,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Class CategoryService
- * @package App\Http\Services
- */
 class CategoryService
 {
-    /**
-     * @var CategoryRepository
-     */
     protected CategoryRepository $categoryRepository;
-
-    /**
-     * @var OpenAiService
-     */
     protected OpenAiService $openAiService;
 
     /**

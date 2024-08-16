@@ -74,23 +74,22 @@ class TaskService
      * Verifies if the provided category or tag Ids are valid
      *
      * @param array $data
-     * @return bool
+     * @return void
      * @throws NullValueException
      */
-    private function dataIsValid(array $data): bool
+    private function dataIsValid(array $data): void
     {
         foreach ($data['tag_id'] as $tag_id) {
             if (!$this->tagService->show($tag_id)) {
-                return false;
+                return;
             }
         }
 
         foreach ($data['category_id'] as $category_id) {
             if (!$this->categoryService->show($category_id)) {
-                return false;
+                return;
             }
         }
-        return true;
     }
 
     /**

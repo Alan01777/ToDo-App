@@ -58,16 +58,16 @@ class TagRepository implements ResourceRepositoryInterface
      *
      * @param int $id The id of the Tag to find
      * @param int $userId The id of the current user
-     * @return TagResource The resource which will return the Tag data
+     * @return Tag The Tag instance which will return the Tag data
      * @throws NullValueException throws an exception if no Tag is found
      */
-    public function find(int $id, int $userId): TagResource
+    public function find(int $id, int $userId): Tag
     {
         $tag = $this->tag->where('id', $id)->where('user_id', $userId)->first();
         if (!$tag) {
             throw new NullValueException('No tag found with id ' . $id);
         }
-        return new TagResource($tag);
+        return $tag;
     }
 
     /**
@@ -96,7 +96,7 @@ class TagRepository implements ResourceRepositoryInterface
     public function delete(int $id, int $userId): Response
     {
         $tag = $this->find($id, $userId);
-        $tag->delete($id);
+        $tag->delete();
         return response()->noContent();
     }
 

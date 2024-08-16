@@ -10,10 +10,6 @@ use Illuminate\Http\Response;
 use App\Repositories\Contracts\ResourceRepositoryInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-/**
- * Class CategoryRepository
- * @package App\Http\Respositories
- */
 class CategoryRepository implements ResourceRepositoryInterface
 {
     private Category $category;
@@ -74,16 +70,16 @@ class CategoryRepository implements ResourceRepositoryInterface
      *
      * @param int $id The id of the category to find.
      * @param int $userId The id of the current user.
-     * @return CategoryResource The resource which return the data of the category.
+     * @return Category The model instance which return the data of the category.
      * @throws NullValueException Throws an exception if no category is found.
      */
-    public function find(int $id, int $userId): CategoryResource
+    public function find(int $id, int $userId): Category
     {
         $category = $this->category->where('user_id', $userId)->where('id', $id)->first();
         if (!$category) {
             throw new NullValueException('No Category found with id ' . $id);
         }
-        return new CategoryResource($category);
+        return $category;
     }
 
     /**
@@ -97,7 +93,7 @@ class CategoryRepository implements ResourceRepositoryInterface
     public function delete(int $id, int $userId): Response
     {
         $category = $this->find($id, $userId);
-        $category->delete($id);
+        $category->delete();
         return response()->noContent();
     }
 

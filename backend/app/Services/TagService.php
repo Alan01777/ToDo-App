@@ -101,7 +101,7 @@ class TagService
      * Delete a Tag.
      *
      * @param int $id
-     * @return JsonResponse
+     * @return Response
      * @throws NullValueException
      */
     public function destroy(int $id): Response

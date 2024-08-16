@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use InvalidArgumentException;
 use OpenAI\Laravel\Facades\OpenAI;
 use App\Repositories\TagRepository;
 use App\Repositories\CategoryRepository;
@@ -51,12 +52,12 @@ class OpenAiService
      *
      * @param  mixed  $chatParameters
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function validateChatParameters(mixed $chatParameters): void
     {
         if (!is_array($chatParameters)) {
-            throw new \InvalidArgumentException('Chat parameters must be an array.');
+            throw new InvalidArgumentException('Chat parameters must be an array.');
         }
     }
 

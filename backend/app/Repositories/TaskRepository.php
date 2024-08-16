@@ -6,7 +6,6 @@ use App\Http\Exceptions\NullValueException;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Repositories\Contracts\ResourceRepositoryInterface;
-use Auth;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -51,8 +50,6 @@ class TaskRepository implements ResourceRepositoryInterface
      */
     public function create(array $data): Task
     {
-
-
         $task = $this->task->create($data);
 
         if (isset($data['tag_id'])) {
@@ -97,10 +94,10 @@ class TaskRepository implements ResourceRepositoryInterface
      *
      * @param int $id The id of the Task to find
      * @param int $userId The id of the current user
-     * @return TaskResource The resource which will the return the updated task data
+     * @return Task The Task instance which will the return the updated task data
      * @throws NullValueException Throws an exception if no Task is found
      */
-    public function find(int $id, int $userId): TaskResource
+    public function find(int $id, int $userId): Task
     {
         $task = $this->task->with(['tags', 'categories'])->where('id', $id)->where('user_id', $userId)->first();
         if (!$task) {
@@ -120,7 +117,7 @@ class TaskRepository implements ResourceRepositoryInterface
     public function delete(int $id, int $userId): Response
     {
         $task = $this->find($id, $userId);
-        $task->delete($id);
+        $task->delete();
         return response()->noContent();
     }
 }
