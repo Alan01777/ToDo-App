@@ -5,9 +5,7 @@ namespace App\Repositories\Contracts;
 use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-/**
- * The RepositoryInterface interface defines the contract for repository classes.
- */
+
 interface ResourceRepositoryInterface
 {
     /**
@@ -16,7 +14,7 @@ interface ResourceRepositoryInterface
      * @param int $userId The ID of the user.
      * @return AnonymousResourceCollection An array of records owned by the user.
      */
-    public function findAllById(int $userId): AnonymousResourceCollection;
+    public function getAllById(int $userId): AnonymousResourceCollection;
 
     /**
      * Create a new record in the repository.
@@ -33,7 +31,7 @@ interface ResourceRepositoryInterface
      * @param int $userId The ID of the user.
      * @return mixed The found record.
      */
-    public function find(int $id, int $userId): mixed;
+    public function getById(int $id, int $userId): mixed;
 
     /**
      * Update a record in the repository.

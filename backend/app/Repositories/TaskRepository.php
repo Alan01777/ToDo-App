@@ -32,7 +32,7 @@ class TaskRepository implements ResourceRepositoryInterface
      * @return AnonymousResourceCollection The paginated list of users.
      * @throws NullValueException
      */
-    public function findAllById(int $userId): AnonymousResourceCollection
+    public function getAllById(int $userId): AnonymousResourceCollection
     {
         $tasks = $this->task->with(['user', 'tags', 'categories'])->where('user_id', $userId)->paginate(10);
         if (!$tasks) {
@@ -74,7 +74,7 @@ class TaskRepository implements ResourceRepositoryInterface
      */
     public function update(int $id, array $data, int $userId): TaskResource
     {
-        $task = $this->find($id, $userId);
+        $task = $this->getById($id, $userId);
 
         $task->update($data);
 
@@ -97,7 +97,7 @@ class TaskRepository implements ResourceRepositoryInterface
      * @return Task The Task instance which will the return the updated task data
      * @throws NullValueException Throws an exception if no Task is found
      */
-    public function find(int $id, int $userId): Task
+    public function getById(int $id, int $userId): Task
     {
         $task = $this->task->with(['tags', 'categories'])->where('id', $id)->where('user_id', $userId)->first();
         if (!$task) {
@@ -116,7 +116,7 @@ class TaskRepository implements ResourceRepositoryInterface
      */
     public function delete(int $id, int $userId): Response
     {
-        $task = $this->find($id, $userId);
+        $task = $this->getById($id, $userId);
         $task->delete();
         return response()->noContent();
     }

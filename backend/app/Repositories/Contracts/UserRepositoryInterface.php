@@ -18,7 +18,7 @@ interface UserRepositoryInterface
      * @param int $userId The user ID.
      * @return mixed The found user.
      */
-    public function find(int $userId): mixed ;
+    public function getById(int $userId): mixed ;
 
     /**
      * Update a user.

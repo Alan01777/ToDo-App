@@ -15,12 +15,7 @@ class TagController extends Controller
 {
     protected TagService $tagService;
 
-    /**
-     * Create a new TagController instance.
-     *
-     * @param  TagService  $tagService
-     * @return void
-     */
+
     public function __construct(TagService $tagService)
     {
         $this->tagService = $tagService;

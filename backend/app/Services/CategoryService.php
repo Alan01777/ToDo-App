@@ -6,9 +6,7 @@ use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Repositories\CategoryRepository;
-use App\Services\OpenAiService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,12 +15,6 @@ class CategoryService
     protected CategoryRepository $categoryRepository;
     protected OpenAiService $openAiService;
 
-    /**
-     * CategoryService constructor.
-     *
-     * @param CategoryRepository $categoryRepository
-     * @param OpenAiService $openAiService
-     */
     public function __construct(CategoryRepository $categoryRepository, OpenAiService $openAiService)
     {
         $this->categoryRepository = $categoryRepository;
@@ -38,7 +30,7 @@ class CategoryService
     public function index(): AnonymousResourceCollection
     {
         $user = Auth::user();
-        $categories = $this->categoryRepository->findAllbyId($user->id);
+        $categories = $this->categoryRepository->getAllById($user->id);
 
         return CategoryResource::collection($categories);
     }
@@ -70,7 +62,7 @@ class CategoryService
     public function show(int $id): CategoryResource
     {
         $user = Auth::user();
-        $category = $this->categoryRepository->find($id, $user->id);
+        $category = $this->categoryRepository->getById($id, $user->id);
 
         return new CategoryResource($category);
     }

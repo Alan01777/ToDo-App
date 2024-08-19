@@ -37,7 +37,7 @@ class UserService
     public function show(int $id): UserResource
     {
         $id = Auth::user()->id;
-        $user = $this->userRepository->find($id);
+        $user = $this->userRepository->getById($id);
         return new UserResource($user);
     }
 

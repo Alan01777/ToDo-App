@@ -15,11 +15,6 @@ class TaskController extends Controller
 {
     protected TaskService $taskService;
 
-    /**
-     * TaskController constructor.
-     *
-     * @param TaskService $taskService
-     */
     public function __construct(TaskService $taskService)
     {
         $this->taskService = $taskService;
@@ -41,6 +36,7 @@ class TaskController extends Controller
      *
      * @param TaskRequest $request
      * @return TaskResource
+     * @throws NullValueException
      */
     public function store(TaskRequest $request): TaskResource
     {

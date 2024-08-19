@@ -10,13 +10,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Class TaskService
- *
- * This class is responsible for handling the business logic related to tasks.
- * It interacts with the TaskRepository to perform CRUD operations on tasks.
- * It also uses the OpenAiService to generate task descriptions based on titles.
- */
 class TaskService
 {
     protected TaskRepository $taskRepository;
@@ -24,12 +17,6 @@ class TaskService
     protected TagService $tagService;
     protected CategoryService $categoryService;
 
-    /**
-     * TaskService constructor.
-     *
-     * @param TaskRepository $taskRepository The task repository instance.
-     * @param OpenAiService $openAiService The OpenAI service instance.
-     */
     public function __construct(TaskRepository $taskRepository, OpenAiService $openAiService, TagService $tagService, CategoryService $categoryService)
     {
         $this->taskRepository = $taskRepository;
@@ -47,7 +34,7 @@ class TaskService
     public function index(): AnonymousResourceCollection
     {
         $user = Auth::user();
-        $tasks = $this->taskRepository->findAllbyId($user->id);
+        $tasks = $this->taskRepository->getAllById($user->id);
         return TaskResource::collection($tasks);
     }
 
@@ -102,7 +89,7 @@ class TaskService
     public function show(int $id): TaskResource
     {
         $user = Auth::user();
-        $task = $this->taskRepository->find($id, $user->id);
+        $task = $this->taskRepository->getById($id, $user->id);
         return new TaskResource($task);
     }
 

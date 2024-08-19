@@ -15,12 +15,7 @@ class CategoryController extends Controller
 {
     protected CategoryService $categoryService;
 
-    /**
-     * Create a new CategoryController instance.
-     *
-     * @param CategoryService $categoryService
-     * @return void
-     */
+
     public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;

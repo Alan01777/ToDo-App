@@ -29,7 +29,7 @@ class CategoryRepository implements ResourceRepositoryInterface
      * @return AnonymousResourceCollection The paginated list of categories owned by the user.
      * @throws NullValueException Throws an exception if no category is found.
      */
-    public function findAllById(int $userId): AnonymousResourceCollection
+    public function getAllById(int $userId): AnonymousResourceCollection
     {
         $categories = $this->category->with('tasks')->where('user_id', $userId)->paginate(25);
         if (!$categories) {
@@ -60,7 +60,7 @@ class CategoryRepository implements ResourceRepositoryInterface
      */
     public function update(int $id, array $data, int $userId): CategoryResource
     {
-        $category = $this->find($id, $userId);
+        $category = $this->getById($id, $userId);
         $category->update($data);
         return new CategoryResource($category);
     }
@@ -73,7 +73,7 @@ class CategoryRepository implements ResourceRepositoryInterface
      * @return Category The model instance which return the data of the category.
      * @throws NullValueException Throws an exception if no category is found.
      */
-    public function find(int $id, int $userId): Category
+    public function getById(int $id, int $userId): Category
     {
         $category = $this->category->where('user_id', $userId)->where('id', $id)->first();
         if (!$category) {
@@ -92,7 +92,7 @@ class CategoryRepository implements ResourceRepositoryInterface
      */
     public function delete(int $id, int $userId): Response
     {
-        $category = $this->find($id, $userId);
+        $category = $this->getById($id, $userId);
         $category->delete();
         return response()->noContent();
     }

@@ -13,12 +13,6 @@ class AuthService
 {
     protected UserRepository $userRepository;
 
-    /**
-     * Create a new instance of AuthService.
-     *
-     * @param UserRepository $userRepository
-     * @return void
-     */
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;

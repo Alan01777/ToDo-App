@@ -45,7 +45,7 @@ class UserRepository implements UserRepositoryInterface
      * @return User The found user.
      * @throws NullValueException If no user is found with the given ID.
      */
-    public function find(int $userId): User
+    public function getById(int $userId): User
     {
         $user = $this->user->with('tasks')->where('id', $userId)->first();
         if (!$user) {

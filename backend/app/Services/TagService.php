@@ -11,22 +11,11 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Class TagService
- * @package App\Http\Services
- */
 class TagService
 {
-    /**
-     * @var TagRepository
-     */
     protected TagRepository $tagRepository;
 
-    /**
-     * TagService constructor.
-     *
-     * @param TagRepository $tagRepository
-     */
+
     public function __construct(TagRepository $tagRepository)
     {
         $this->tagRepository = $tagRepository;
@@ -41,7 +30,7 @@ class TagService
     public function index(): AnonymousResourceCollection
     {
         $user = Auth::user();
-        $tags = $this->tagRepository->findAllbyId($user->id);
+        $tags = $this->tagRepository->getAllById($user->id);
 
         return TagResource::collection($tags);
     }
@@ -72,7 +61,7 @@ class TagService
     public function show(int $id): TagResource
     {
         $user = Auth::user();
-        $tag = $this->tagRepository->find($id, $user->id);
+        $tag = $this->tagRepository->getById($id, $user->id);
 
 
         return new TagResource($tag);

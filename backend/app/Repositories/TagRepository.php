@@ -33,7 +33,7 @@ class TagRepository implements ResourceRepositoryInterface
      * @return AnonymousResourceCollection The paginated list of Tags
      * @throws NullValueException throws an exception if no Tag is found
      */
-    public function findAllById(int $userId): AnonymousResourceCollection
+    public function getAllById(int $userId): AnonymousResourceCollection
     {
         $tags = $this->tag->with('tasks')->where('user_id', $userId)->paginate(25);
         if (!$tags) {
@@ -61,7 +61,7 @@ class TagRepository implements ResourceRepositoryInterface
      * @return Tag The Tag instance which will return the Tag data
      * @throws NullValueException throws an exception if no Tag is found
      */
-    public function find(int $id, int $userId): Tag
+    public function getById(int $id, int $userId): Tag
     {
         $tag = $this->tag->where('id', $id)->where('user_id', $userId)->first();
         if (!$tag) {
@@ -80,7 +80,7 @@ class TagRepository implements ResourceRepositoryInterface
      */
     public function update(int $id, array $data, int $userId): TagResource
     {
-        $tag = $this->find($id, $userId);
+        $tag = $this->getById($id, $userId);
         $tag->update($data);
         return new TagResource($tag);
     }
@@ -95,7 +95,7 @@ class TagRepository implements ResourceRepositoryInterface
      */
     public function delete(int $id, int $userId): Response
     {
-        $tag = $this->find($id, $userId);
+        $tag = $this->getById($id, $userId);
         $tag->delete();
         return response()->noContent();
     }
