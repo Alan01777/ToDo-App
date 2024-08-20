@@ -4,7 +4,7 @@ namespace App\Repositories\Resources;
 
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Resources\CategoryResource;
+use App\Http\Resources\v1\CategoryResource;
 use App\Models\Category;
 use App\Repositories\Contracts\ResourceRepositoryInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;

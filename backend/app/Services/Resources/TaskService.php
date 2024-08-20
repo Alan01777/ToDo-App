@@ -3,8 +3,8 @@
 namespace App\Services\Resources;
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Requests\TaskRequest;
-use App\Http\Resources\TaskResource;
+use App\Http\Requests\v1\TaskRequest;
+use App\Http\Resources\v1\TaskResource;
 use App\Repositories\Resources\TaskRepository;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -35,17 +35,17 @@ class TaskService
     {
         $user = Auth::user();
         $tasks = $this->taskRepository->getAllById($user->id);
-        return TaskResource::collection($tasks);
+        return \App\Http\Resources\v1\TaskResource::collection($tasks);
     }
 
     /**
      * Store a new task.
      *
-     * @param TaskRequest $request The task request instance.
-     * @return TaskResource The newly created task as a JSON resource.
+     * @param \App\Http\Requests\v1\TaskRequest $request The task request instance.
+     * @return \App\Http\Resources\v1\TaskResource The newly created task as a JSON resource.
      * @throws NullValueException
      */
-    public function store(TaskRequest $request): TaskResource
+    public function store(TaskRequest $request): \App\Http\Resources\v1\TaskResource
     {
         $data = $request->validated();
         $this->dataIsValid($data);
@@ -54,7 +54,7 @@ class TaskService
 
         $task = $this->taskRepository->create($data);
 
-        return new TaskResource($task);
+        return new \App\Http\Resources\v1\TaskResource($task);
     }
 
     /**
@@ -83,14 +83,14 @@ class TaskService
      * Get a specific task by ID.
      *
      * @param int $id The task ID.
-     * @return TaskResource The task as a JSON resource.
+     * @return \App\Http\Resources\v1\TaskResource The task as a JSON resource.
      * @throws NullValueException
      */
     public function show(int $id): TaskResource
     {
         $user = Auth::user();
         $task = $this->taskRepository->getById($id, $user->id);
-        return new TaskResource($task);
+        return new \App\Http\Resources\v1\TaskResource($task);
     }
 
     /**
@@ -113,9 +113,9 @@ class TaskService
     /**
      * Update a task.
      *
-     * @param TaskRequest $request The task request instance.
+     * @param \App\Http\Requests\v1\TaskRequest $request The task request instance.
      * @param int $id The task ID.
-     * @return TaskResource The updated task as a JSON resource.
+     * @return \App\Http\Resources\v1\TaskResource The updated task as a JSON resource.
      * @throws NullValueException
      */
     public function update(TaskRequest $request, int $id): TaskResource
@@ -123,7 +123,7 @@ class TaskService
         $data = $request->validated();
         $user = Auth::user();
         $task = $this->taskRepository->update($id, $data, $user->id);
-        return new TaskResource($task);
+        return new \App\Http\Resources\v1\TaskResource($task);
     }
 
     /**

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\AuthRequest;
+use App\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Services\Auth\AuthService;
-use App\Http\Requests\AuthRequest;
 
 class AuthController extends Controller
 {
@@ -19,7 +20,7 @@ class AuthController extends Controller
     /**
      * Create user
      *
-     * @param AuthRequest $request
+     * @param \App\Http\Requests\v1\AuthRequest $request
      * @return JsonResponse [string] message
      */
     public function register(AuthRequest $request): JsonResponse
@@ -30,7 +31,7 @@ class AuthController extends Controller
     /**
      * Login user and create token
      *
-     * @param AuthRequest $request
+     * @param \App\Http\Requests\v1\AuthRequest $request
      * @return JsonResponse [string] message
      */
     public function login(AuthRequest $request): JsonResponse

@@ -3,7 +3,7 @@
 namespace App\Repositories\Resources;
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Resources\TagResource;
+use App\Http\Resources\v1\TagResource;
 use App\Models\Tag;
 use App\Repositories\Contracts\ResourceRepositoryInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -74,7 +74,7 @@ class TagRepository implements ResourceRepositoryInterface
      * @return TagResource The resource which will return the Tag data
      * @throws NullValueException throws an exception if no Tag is found
      */
-    public function update(int $id, array $data, int $userId): TagResource
+    public function update(int $id, array $data, int $userId): \App\Http\Resources\v1\TagResource
     {
         $tag = $this->getById($id, $userId);
         $tag->update($data);

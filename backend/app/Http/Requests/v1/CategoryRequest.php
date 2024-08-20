@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TagRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,15 +21,10 @@ class TagRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->routeIs('tags.update')) {
-            // Rules for 'users.update' route
-            return [
-                'title' => 'sometimes|string|max:255',
-            ];
-        } else {
-            return [
-                'title' => 'required|string|max:255',
-            ];
-        }
+
+        return [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+        ];
     }
 }

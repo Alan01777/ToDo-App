@@ -3,7 +3,7 @@
 namespace App\Repositories\Resources;
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Resources\TaskResource;
+use App\Http\Resources\v1\TaskResource;
 use App\Models\Task;
 use App\Repositories\Contracts\ResourceRepositoryInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -62,7 +62,7 @@ class TaskRepository implements ResourceRepositoryInterface
      * @param int $id The id of the Task to Update
      * @param array $data The data to update the task
      * @param int $userId The id of the current user
-     * @return TaskResource The resource which will the return the updated task data
+     * @return \App\Http\Resources\v1\TaskResource The resource which will the return the updated task data
      * @throws NullValueException Throws an exception if no Task is found
      */
     public function update(int $id, array $data, int $userId): TaskResource
@@ -79,7 +79,7 @@ class TaskRepository implements ResourceRepositoryInterface
             $task->categories()->sync($data['category_id']);
         }
 
-        return new TaskResource($task);
+        return new \App\Http\Resources\v1\TaskResource($task);
     }
 
     /**

@@ -3,8 +3,8 @@
 namespace App\Services\Resources;
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Requests\CategoryRequest;
-use App\Http\Resources\CategoryResource;
+use App\Http\Requests\v1\CategoryRequest;
+use App\Http\Resources\v1\CategoryResource;
 use App\Repositories\Resources\CategoryRepository;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -32,16 +32,16 @@ class CategoryService
         $user = Auth::user();
         $categories = $this->categoryRepository->getAllById($user->id);
 
-        return CategoryResource::collection($categories);
+        return \App\Http\Resources\v1\CategoryResource::collection($categories);
     }
 
     /**
      * Store a new Category.
      *
-     * @param CategoryRequest $request
-     * @return CategoryResource
+     * @param \App\Http\Requests\v1\CategoryRequest $request
+     * @return \App\Http\Resources\v1\CategoryResource
      */
-    public function store(CategoryRequest $request): CategoryResource
+    public function store(CategoryRequest $request): \App\Http\Resources\v1\CategoryResource
     {
         $validatedData = $request->validated();
         $data = array_merge($validatedData, ['user_id' => Auth::user()->id]);
@@ -49,33 +49,33 @@ class CategoryService
 
         $category = $this->categoryRepository->create($data);
 
-        return new CategoryResource($category);
+        return new \App\Http\Resources\v1\CategoryResource($category);
     }
 
     /**
      * Get a specific Category by ID.
      *
      * @param int $id
-     * @return CategoryResource
+     * @return \App\Http\Resources\v1\CategoryResource
      * @throws NullValueException
      */
-    public function show(int $id): CategoryResource
+    public function show(int $id): \App\Http\Resources\v1\CategoryResource
     {
         $user = Auth::user();
         $category = $this->categoryRepository->getById($id, $user->id);
 
-        return new CategoryResource($category);
+        return new \App\Http\Resources\v1\CategoryResource($category);
     }
 
     /**
      * Update a Category.
      *
-     * @param CategoryRequest $request
+     * @param \App\Http\Requests\v1\CategoryRequest $request
      * @param int $id
-     * @return CategoryResource
+     * @return \App\Http\Resources\v1\CategoryResource
      * @throws NullValueException
      */
-    public function update(CategoryRequest $request, int $id): CategoryResource
+    public function update(CategoryRequest $request, int $id): \App\Http\Resources\v1\CategoryResource
     {
         $user = Auth::user();
         $validatedData = $request->validated();
@@ -83,7 +83,7 @@ class CategoryService
 
         $category = $this->categoryRepository->update($id, $data, $user->id);
 
-        return new CategoryResource($category);
+        return new \App\Http\Resources\v1\CategoryResource($category);
     }
 
     /**

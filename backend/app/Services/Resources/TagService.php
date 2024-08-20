@@ -3,8 +3,8 @@
 namespace App\Services\Resources;
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Requests\TagRequest;
-use App\Http\Resources\TagResource;
+use App\Http\Requests\v1\TagRequest;
+use App\Http\Resources\v1\TagResource;
 use App\Repositories\Resources\TagRepository;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -31,16 +31,16 @@ class TagService
         $user = Auth::user();
         $tags = $this->tagRepository->getAllById($user->id);
 
-        return TagResource::collection($tags);
+        return \App\Http\Resources\v1\TagResource::collection($tags);
     }
 
     /**
      * Store a new Tag.
      *
-     * @param TagRequest $request
+     * @param \App\Http\Requests\v1\TagRequest $request
      * @return TagResource
      */
-    public function store(TagRequest $request): TagResource
+    public function store(TagRequest $request): \App\Http\Resources\v1\TagResource
     {
         $validatedData = $request->validated();
         $data = array_merge($validatedData, ['user_id' => Auth::user()->id]);
@@ -57,21 +57,21 @@ class TagService
      * @return TagResource
      * @throws NullValueException
      */
-    public function show(int $id): TagResource
+    public function show(int $id): \App\Http\Resources\v1\TagResource
     {
         $user = Auth::user();
         $tag = $this->tagRepository->getById($id, $user->id);
 
 
-        return new TagResource($tag);
+        return new \App\Http\Resources\v1\TagResource($tag);
     }
 
     /**
      * Update a Tag.
      *
-     * @param TagRequest $request
+     * @param \App\Http\Requests\v1\TagRequest $request
      * @param int $id
-     * @return TagResource
+     * @return \App\Http\Resources\v1\TagResource
      * @throws NullValueException
      */
     public function update(TagRequest $request, int $id): TagResource
@@ -82,7 +82,7 @@ class TagService
 
         $tag = $this->tagRepository->update($id, $data, $user->id);
 
-        return new TagResource($tag);
+        return new \App\Http\Resources\v1\TagResource($tag);
     }
 
     /**

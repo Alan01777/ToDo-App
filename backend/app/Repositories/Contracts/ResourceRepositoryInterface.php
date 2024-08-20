@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Exceptions\NullValueException;
-use App\Http\Requests\TaskRequest;
-use App\Http\Resources\TaskResource;
+use App\Http\Requests\v1\TaskRequest;
+use App\Http\Resources\v1\TaskResource;
 use App\Services\Resources\TaskService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -46,7 +46,7 @@ class TaskController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return TaskResource
+     * @return \App\Http\Resources\v1\TaskResource
      * @throws NullValueException
      */
     public function show(int $id): TaskResource
@@ -57,7 +57,7 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param TaskRequest $request
+     * @param \App\Http\Requests\v1\TaskRequest $request
      * @param int $id
      * @return TaskResource
      * @throws NullValueException

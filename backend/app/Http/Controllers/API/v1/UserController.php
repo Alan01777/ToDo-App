@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Exceptions\NullValueException;
-use App\Http\Requests\UserRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Requests\v1\UserRequest;
+use App\Http\Resources\v1\UserResource;
 use App\Services\Auth\UserService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -34,9 +33,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UserRequest $request The request object containing the user data.
+     * @param \App\Http\Requests\v1\UserRequest $request The request object containing the user data.
      * @param int $id The ID of the user to update.
-     * @return UserResource The updated user resource.
+     * @return \App\Http\Resources\v1\UserResource The updated user resource.
      * @throws NullValueException
      */
     public function update(UserRequest $request, int $id): UserResource

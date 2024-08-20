@@ -3,8 +3,8 @@
 namespace App\Services\Auth;
 
 use App\Http\Exceptions\NullValueException;
-use App\Http\Requests\UserRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Requests\v1\UserRequest;
+use App\Http\Resources\v1\UserResource;
 use App\Repositories\Resources\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +44,7 @@ class UserService
     /**
      * Update a user.
      *
-     * @param UserRequest $request
+     * @param \App\Http\Requests\v1\UserRequest $request
      * @param int $id
      * @return UserResource
      * @throws NullValueException

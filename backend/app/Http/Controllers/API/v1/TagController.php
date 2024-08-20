@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Exceptions\NullValueException;
-use App\Http\Requests\TagRequest;
-use App\Http\Resources\TagResource;
+use App\Http\Requests\v1\TagRequest;
+use App\Http\Resources\v1\TagResource;
 use App\Services\Resources\TagService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -35,7 +35,7 @@ class TagController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  TagRequest  $request
-     * @return TagResource
+     * @return \App\Http\Resources\v1\TagResource
      */
     public function store(TagRequest $request): TagResource
     {
@@ -46,7 +46,7 @@ class TagController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return TagResource
+     * @return \App\Http\Resources\v1\TagResource
      * @throws NullValueException
      */
     public function show(int $id): TagResource
@@ -57,9 +57,9 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param TagRequest $request
+     * @param \App\Http\Requests\v1\TagRequest $request
      * @param int $id
-     * @return TagResource
+     * @return \App\Http\Resources\v1\TagResource
      * @throws NullValueException
      */
     public function update(TagRequest $request, int $id): TagResource

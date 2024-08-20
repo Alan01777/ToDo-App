@@ -2,7 +2,7 @@
 
 namespace App\Services\Auth;
 
-use App\Http\Requests\AuthRequest;
+use App\Http\Requests\v1\AuthRequest;
 use App\Repositories\Resources\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class AuthService
     /**
      * Register a new user.
      *
-     * @param AuthRequest $request
+     * @param \App\Http\Requests\v1\AuthRequest $request
      * @return JsonResponse
      */
     public function register(AuthRequest $request): JsonResponse
@@ -44,7 +44,7 @@ class AuthService
     /**
      * Log in a user.
      *
-     * @param AuthRequest $request
+     * @param \App\Http\Requests\v1\AuthRequest $request
      * @return JsonResponse
      */
     public function login(AuthRequest $request): JsonResponse
