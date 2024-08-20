@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Resources;
 
 use App\Http\Exceptions\NullValueException;
-use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Models\User;
+use App\Repositories\Contracts\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
 {

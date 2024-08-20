@@ -4,8 +4,8 @@ namespace App\Services\Auth;
 
 use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\UserRequest;
-use App\Repositories\UserRepository;
 use App\Http\Resources\UserResource;
+use App\Repositories\Resources\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +22,7 @@ class UserService
 
     /**
      * UserService constructor.
-     * @param UserRepository $userRepository
+     * @param \App\Repositories\Resources\UserRepository $userRepository
      */
     public function __construct(UserRepository $userRepository)
     {

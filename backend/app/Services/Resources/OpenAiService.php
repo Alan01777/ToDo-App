@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Resources;
 
+use App\Repositories\Resources\CategoryRepository;
+use App\Repositories\Resources\TagRepository;
 use InvalidArgumentException;
 use OpenAI\Laravel\Facades\OpenAI;
-use App\Repositories\TagRepository;
-use App\Repositories\CategoryRepository;
 
 class OpenAiService
 {

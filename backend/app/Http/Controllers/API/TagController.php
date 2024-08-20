@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\TagRequest;
 use App\Http\Resources\TagResource;
-use App\Services\TagService;
-use Illuminate\Http\Request;
+use App\Services\Resources\TagService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 

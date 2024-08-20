@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
-use App\Services\TaskService;
-use Illuminate\Http\Request;
+use App\Services\Resources\TaskService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 

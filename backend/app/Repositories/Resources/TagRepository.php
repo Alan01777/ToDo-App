@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Resources;
 
 use App\Http\Exceptions\NullValueException;
-use App\Repositories\Contracts\ResourceRepositoryInterface;
 use App\Http\Resources\TagResource;
 use App\Models\Tag;
-use Illuminate\Http\Response;
+use App\Repositories\Contracts\ResourceRepositoryInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 /**
  * Class TagRepository

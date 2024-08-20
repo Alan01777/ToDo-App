@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Resources;
 
 use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Repositories\CategoryRepository;
+use App\Repositories\Resources\CategoryRepository;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;

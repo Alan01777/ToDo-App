@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Resources;
 
 use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
-use App\Repositories\TaskRepository;
+use App\Repositories\Resources\TaskRepository;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;

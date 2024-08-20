@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Resources;
 
 use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\TagRequest;
 use App\Http\Resources\TagResource;
-use App\Repositories\TagRepository;
-use Illuminate\Http\JsonResponse;
+use App\Repositories\Resources\TagRepository;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;

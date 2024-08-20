@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Resources;
 
 use App\Http\Exceptions\NullValueException;
 use App\Http\Resources\TaskResource;

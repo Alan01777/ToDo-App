@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Exceptions\NullValueException;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Services\CategoryService;
-use Illuminate\Http\Request;
+use App\Services\Resources\CategoryService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 

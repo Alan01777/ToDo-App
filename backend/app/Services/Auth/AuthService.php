@@ -2,12 +2,11 @@
 
 namespace App\Services\Auth;
 
+use App\Http\Requests\AuthRequest;
+use App\Repositories\Resources\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\AuthRequest;
-use App\Repositories\UserRepository;
-use Validator;
 
 class AuthService
 {
