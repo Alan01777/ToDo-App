@@ -10,11 +10,6 @@ class UserRepository implements UserRepositoryInterface
 {
     private User $user;
 
-    /**
-     * UserRepository constructor.
-     *
-     * @param User $user The User model instance.
-     */
     public function __construct(User $user)
     {
         $this->user = $user;

@@ -9,18 +9,11 @@ use App\Repositories\Contracts\ResourceRepositoryInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
-/**
- * Class TaskRepository
- * @package App\Http\Respositories
- */
+
 class TaskRepository implements ResourceRepositoryInterface
 {
     private Task $task;
 
-    /**
-     * TaskRepository constructor.
-     * @param Task $task
-     */
     public function __construct(Task $task)
     {
         $this->task = $task;

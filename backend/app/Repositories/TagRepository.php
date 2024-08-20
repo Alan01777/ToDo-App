@@ -17,10 +17,6 @@ class TagRepository implements ResourceRepositoryInterface
 {
     private Tag $tag;
 
-    /**
-     * TaskRepository constructor.
-     * @param Tag $tag
-     */
     public function __construct(Tag $tag)
     {
         $this->tag = $tag;

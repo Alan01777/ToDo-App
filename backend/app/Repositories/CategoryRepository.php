@@ -13,11 +13,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class CategoryRepository implements ResourceRepositoryInterface
 {
     private Category $category;
-
-    /**
-     * TaskRepository constructor.
-     * @param Category $category
-     */
     public function __construct(Category $category)
     {
         $this->category = $category;
